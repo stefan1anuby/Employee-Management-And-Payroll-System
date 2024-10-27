@@ -5,7 +5,7 @@
 * <code>[Gabriel Constantinescu](https://github.com/iceeye7gabi)</code>
 
 ## Team Members:
-test
+
 * <code>[Popa Stefan-Eduard](https://github.com/stefan1anuby)</code>
 * <code>[George Cojocaru](https://github.com/George166382)</code>
 * <code>[Dumitru Daniel-Antoniu](https://github.com/Dumitru-Daniel-Antoniu)</code>
