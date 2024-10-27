@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import 'src/global.css';
 
-function App() {
+import { Router } from 'src/routes/sections';
+
+import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
+
+import { ThemeProvider } from 'src/theme/theme-provider';
+
+// ----------------------------------------------------------------------
+
+export default function App() {
+  useScrollToTop();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <Router />
+    </ThemeProvider>
   );
 }
-
-export default App;
