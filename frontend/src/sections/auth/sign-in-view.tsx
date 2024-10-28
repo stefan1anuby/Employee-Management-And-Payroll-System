@@ -12,6 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useRouter } from 'src/routes/hooks';
 
 import { Iconify } from 'src/components/iconify';
+import Button from '@mui/material/Button';
 
 // ----------------------------------------------------------------------
 
@@ -94,11 +95,17 @@ export function SignInView() {
         </Typography>
       </Divider>
 
-      <Box gap={1} display="flex" justifyContent="center">
-        <IconButton color="inherit">
-          <Iconify icon="logos:google-icon" />
-        </IconButton>
-      </Box>
+      <Box display="flex" justifyContent="center">
+  <Button 
+    variant="outlined" 
+    color="inherit" 
+    startIcon={<Iconify icon="logos:google-icon" />} 
+    
+  >
+    Sign in with Google
+  </Button>
+</Box>
+
     </>
   );
 }
