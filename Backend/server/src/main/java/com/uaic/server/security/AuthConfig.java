@@ -6,6 +6,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+//the Facade design pattern is used to provide a simple class with a secured http request
 @Configuration
 public class AuthConfig {
     
