@@ -18,24 +18,25 @@ public class InMemoryUserRepository implements UserRepository {
     
     private static final List<User> list = new ArrayList<>();
 
-    public static List<User> getList() {
+    @Override
+    public  List<User> getList() {
         return list;
     }
 
    
     
     
-    // Method to add users for testing
+    @Override
     public void addUser(User user) {
         list.add(user);
     }
     @Override
     public User findByUsername(String username) {
-        // Search for a user by username in the list
+        
         return list.stream()
                    .filter(user -> user.getUsername().equals(username))
                    .findFirst()
-                   .orElse(null); // Return null if not found
+                   .orElse(null); 
     }
 
    @Override
