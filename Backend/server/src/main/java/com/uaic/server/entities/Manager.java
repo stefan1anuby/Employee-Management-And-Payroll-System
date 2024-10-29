@@ -35,6 +35,7 @@ public class Manager extends Employee{
         this.companyBankAccount = companyBankAccount;
     }
     
+    // urmeaza sa folosesc Observer aici, pentru a notifica ceilalti angajati in legatura cu anunturile
     public void postAnnouncement()
     {
         
