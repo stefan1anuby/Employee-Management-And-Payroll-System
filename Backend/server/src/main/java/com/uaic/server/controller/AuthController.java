@@ -2,6 +2,7 @@ package com.uaic.server.controller;
 
 import java.security.Principal;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,10 @@ import java.util.UUID;
 @RestController
 public class AuthController {
 
-    private String googleAuthenticationPage = "https://accounts.google.com/o/oauth2/v2/auth";
+    private String authenticationPage = "https://accounts.google.com/o/oauth2/v2/auth";
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleClientId;
 
     @RequestMapping("/")
     public String home() {
@@ -33,9 +37,8 @@ public class AuthController {
 
         switch (provider.toLowerCase()) {
             case "google":
-                //Needs to be improved on the security part
-                clientId = "";//googleClientId;
-                redirectUri = "";//googleRedirectUri;
+                clientId = googleClientId;
+                redirectUri = "http://localhost:8080/oauth2/callback";
                 break;
             default:
                 Map<String, String> notFoundResource = new HashMap<>();
@@ -45,7 +48,7 @@ public class AuthController {
         }
 
         String state = UUID.randomUUID().toString();
-        String url = googleAuthenticationPage + 
+        String url = authenticationPage + 
                      "?client_id=" + clientId +
                      "&redirect_uri=" + redirectUri +
                      "&response_type=code" +
