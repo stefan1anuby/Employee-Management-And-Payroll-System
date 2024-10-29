@@ -14,9 +14,26 @@ import java.util.Optional;
  *
  * @author G
  */
+
+// Repository Pattern : Implementarea UserRepository
 public class InMemoryUserRepository implements UserRepository {
     
-    private static final List<User> list = new ArrayList<>();
+     private static final List<User> list = new ArrayList<>();
+    
+     // Singleton Design Pattern, folosit pentru a asigura ca aceasta  clasa va avea doar o singura instanta ce poate fi accesata global.
+    // Instanta Singleton
+    private static InMemoryUserRepository instance;
+
+    // Constructor privat ca sa asiguram instantierea o singura data;
+    private InMemoryUserRepository() { }
+
+    // Metoda pentru a accesa instanta Singleton
+    public static InMemoryUserRepository getInstance() {
+        if (instance == null) {
+            instance = new InMemoryUserRepository();
+        }
+        return instance;
+    }
 
     @Override
     public  List<User> getList() {
