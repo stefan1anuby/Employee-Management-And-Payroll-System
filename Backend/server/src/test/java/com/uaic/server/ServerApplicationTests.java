@@ -13,11 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ServerApplicationTests {
 
-       private InMemoryUserRepository userRepository;
+      private InMemoryUserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        userRepository = new InMemoryUserRepository();
+        // Folosim instanta Singleton
+        userRepository = InMemoryUserRepository.getInstance();
+        userRepository.deleteAll();
     }
 
     @Test
