@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
  *
  * @author G
  */
+
+// Repository Pattern : Abstractizarea Data Access Layer
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
 
