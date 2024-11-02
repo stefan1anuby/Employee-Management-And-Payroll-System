@@ -35,18 +35,12 @@ public class InMemoryUserRepository implements UserRepository {
         return instance;
     }
 
-    @Override
-    public  List<User> getList() {
-        return list;
-    }
+   
 
    
     
     
-    @Override
-    public void addUser(User user) {
-        list.add(user);
-    }
+  
     @Override
     public User findByUsername(String username) {
         

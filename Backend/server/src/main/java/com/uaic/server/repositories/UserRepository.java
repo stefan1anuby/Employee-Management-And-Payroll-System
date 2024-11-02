@@ -19,8 +19,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
 
-   public  List<User> getList();
-   public void addUser(User user);
+  // public  List<User> getList();
+   //public void addUser(User user);
    User findByUsername(String username);
    public Optional<User> findById(Integer id);
    public boolean existsById(Integer id);
