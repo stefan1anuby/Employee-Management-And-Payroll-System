@@ -4,8 +4,11 @@
  */
 package com.uaic.server.entities;
 
+import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
@@ -17,13 +20,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Entity
 public class User   {
 
-   @NotNull
+  
+   
+   @Id
+   private Integer id;
    private String username;
    
-   @NotNull
-   private Integer id;
+   
 
-   @NotNull
+   
    private String pwHash;
    
    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

@@ -26,7 +26,7 @@ class ServerApplicationTests {
     void testFindByUsername() {
 
         User user = new User(1,"john_doe", "password123");
-        userRepository.addUser(user);
+        userRepository.save(user);
 
         User foundUser = userRepository.findByUsername("john_doe");
 
@@ -38,7 +38,7 @@ class ServerApplicationTests {
     void testFindById() {
         
         User user = new User(1,"john_doe", "password123");
-        userRepository.addUser(user);
+        userRepository.save(user);
         
         Optional<User> foundUser = userRepository.findById(1);
 
@@ -51,10 +51,10 @@ class ServerApplicationTests {
     void testFindAll() {
         
         User user1 = new User(1, "john_doe", "password123");
-        userRepository.addUser(user1);
+        userRepository.save(user1);
 
         User user2 = new User(2, "andrei", "dsijaidsa");
-        userRepository.addUser(user2);
+        userRepository.save(user2);
      
         Iterable<User> users = userRepository.findAll();
    

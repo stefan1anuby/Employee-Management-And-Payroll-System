@@ -4,11 +4,16 @@
  */
 package com.uaic.server.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 /**
  *
  * @author G
  */
+@Entity
 public class Employee {
+    @Id
     Integer id;
     String name;
     String email;
