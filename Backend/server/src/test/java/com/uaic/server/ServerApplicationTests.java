@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-class ServerApplicatnionTests {
+class ServerApplicationTests {
 
       private InMemoryUserRepository userRepository;
 
