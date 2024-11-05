@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": ".", // Set this to './src' if that's where your modules are located
+    "paths": {
+      "*": ["*", "src/*"] // This allows Jest to resolve 'src/*' correctly
+    },
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "strict": true,
@@ -19,9 +22,10 @@
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest"] 
   },
-  "include": ["src"],
+  "include": ["src", "src/**/*.test.tsx", "jest.config.js"],
   "exclude": ["node_modules"],
   "references": [
     {
