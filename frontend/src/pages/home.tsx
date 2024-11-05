@@ -11,6 +11,7 @@ export default function Page() {
     <>
       <Helmet>
         <title> {`Dashboard - ${CONFIG.appName}`}</title>
+        
       </Helmet>
 
       <OverviewAnalyticsView />
