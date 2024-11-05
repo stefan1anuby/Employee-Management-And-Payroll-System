@@ -4,13 +4,12 @@
  */
 package com.uaic.server.entities;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 
 /**
  *
@@ -18,39 +17,45 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 
 @Entity
-public class User   {
+public class User {
 
-  
-   
-   @Id
-   private Integer id;
-   private String username;
-   
-   
+     @Id
+     private Integer id;
+     private String username;
+     private String email;
+     private LocalDateTime date;
 
-   
-   private String pwHash;
-   
-   private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+     private String pwHash;
 
+     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-   public User() {}
+     public User() {
+     }
 
-   public User(Integer id,String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.pwHash = encoder.encode(password);
-   }
+     public User(Integer id, String username, String email, String password) {
+          this.id = id;
+          this.username = username;
+          this.email = email;
+          this.pwHash = encoder.encode(password);
+     }
 
-   public String getUsername() {
-        return username;
-   }
+     public String getUsername() {
+          return username;
+     }
 
-    public Integer getId() {
-        return id;
-    }
-   
-   public boolean isMatchingPassword(String password) {
-        return encoder.matches(password, pwHash);
-   }
+     public Integer getId() {
+          return id;
+     }
+
+     public String getEmail() {
+          return email;
+     }
+
+     public LocalDateTime getDate() {
+          return date;
+     }
+
+     public boolean isMatchingPassword(String password) {
+          return encoder.matches(password, pwHash);
+     }
 }

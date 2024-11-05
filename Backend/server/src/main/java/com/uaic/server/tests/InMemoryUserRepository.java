@@ -6,6 +6,8 @@ package com.uaic.server.tests;
 
 import com.uaic.server.entities.User;
 import com.uaic.server.repositories.UserRepository;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +19,17 @@ import java.util.Optional;
 
 // Repository Pattern : Implementarea UserRepository
 public class InMemoryUserRepository implements UserRepository {
-    
-     private static final List<User> list = new ArrayList<>();
-    
-     // Singleton Design Pattern, folosit pentru a asigura ca aceasta  clasa va avea doar o singura instanta ce poate fi accesata global.
+
+    private static final List<User> list = new ArrayList<>();
+
+    // Singleton Design Pattern, folosit pentru a asigura ca aceasta clasa va avea
+    // doar o singura instanta ce poate fi accesata global.
     // Instanta Singleton
     private static InMemoryUserRepository instance;
 
     // Constructor privat ca sa asiguram instantierea o singura data;
-    private InMemoryUserRepository() { }
+    private InMemoryUserRepository() {
+    }
 
     // Metoda pentru a accesa instanta Singleton
     public static InMemoryUserRepository getInstance() {
@@ -35,22 +39,40 @@ public class InMemoryUserRepository implements UserRepository {
         return instance;
     }
 
-   
-
-   
-    
-    
-  
     @Override
-    public User findByUsername(String username) {
-        
-        return list.stream()
-                   .filter(user -> user.getUsername().equals(username))
-                   .findFirst()
-                   .orElse(null); 
+    public List<User> findByUsername(String username) {
+        User newUser = list.stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+        List<User> newList = new ArrayList<User>();
+        newList.add(newUser);
+        return newList;
     }
 
-   @Override
+    @Override
+    public List<User> findByEmail(String email) {
+        User newUser = list.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
+        List<User> newList = new ArrayList<User>();
+        newList.add(newUser);
+        return newList;
+    }
+
+    @Override
+    public List<User> findByDate(LocalDateTime date) {
+        User newUser = list.stream()
+                .filter(user -> user.getDate().equals(date))
+                .findFirst()
+                .orElse(null);
+        List<User> newList = new ArrayList<User>();
+        newList.add(newUser);
+        return newList;
+    }
+
+    @Override
     public <S extends User> S save(S entity) {
         list.add(entity);
         return entity;
@@ -65,13 +87,28 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(Integer id) {
         return list.stream()
-                   .filter(user -> user.getId().equals(id))
-                   .findFirst();
+                .filter(user -> user.getId().equals(id))
+                .findFirst();
     }
 
     @Override
     public boolean existsById(Integer id) {
         return list.stream().anyMatch(user -> user.getId().equals(id));
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return list.stream().anyMatch(user -> user.getUsername().equals(username));
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return list.stream().anyMatch(user -> user.getEmail().equals(email));
+    }
+
+    @Override
+    public boolean existsByDate(LocalDateTime date) {
+        return list.stream().anyMatch(user -> user.getDate().equals(date));
     }
 
     @Override
@@ -99,6 +136,21 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public void deleteByUsername(String username) {
+        list.removeIf(user -> user.getUsername().equals(username));
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        list.removeIf(user -> user.getEmail().equals(email));
+    }
+
+    @Override
+    public void deleteByDate(LocalDateTime date) {
+        list.removeIf(user -> user.getDate().equals(date));
+    }
+
+    @Override
     public void delete(User entity) {
         list.remove(entity);
     }
@@ -119,5 +171,5 @@ public class InMemoryUserRepository implements UserRepository {
     public void deleteAll() {
         list.clear();
     }
-    
+
 }
