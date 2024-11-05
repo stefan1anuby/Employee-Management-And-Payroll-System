@@ -4,39 +4,83 @@
  */
 package com.uaic.server.entities;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  *
  * @author G
  */
 @Entity
+@Table(name = "Employees")
 public class Employee {
-    @Id
-    Integer id;
-    String name;
-    String email;
-    String role;
-    String department;
-    int salary;
-    int activity;
-    int attendance;
 
-    public Employee(Integer id, String name, String email, String role, String department, int salary) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    
+    private String name;
+    
+    @Column(unique = true)
+    private String email;
+    
+    private String phoneNumber;
+    private String department;
+    
+    private BigDecimal salary;
+    private String team;
+
+    // Enum for role with mapping to SQL ENUM type
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
+
+    // List of managed employee IDs for HR employees
+    @ElementCollection
+    @CollectionTable(name = "employee_managed_ids", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "managed_employee_id")
+    private List<Integer> managedEmployeeIds;
+
+    // Enum for role with possible values
+    public enum Role {
+        MANAGER, HR
+    }
+
+    // Constructors, getters, setters, and business methods
+
+    public Employee() {}
+
+    public Employee(Integer id, String name, String email, String phoneNumber, Role role,
+                    String department, BigDecimal salary, String team, 
+                    List<Integer> managedEmployeeIds) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.role = role;
         this.department = department;
         this.salary = salary;
+        this.team = team;
+        this.managedEmployeeIds = managedEmployeeIds;
     }
 
-    public int getId() {
+    // Getters and setters
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -56,11 +100,19 @@ public class Employee {
         this.email = email;
     }
 
-    public String getRole() {
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -72,44 +124,45 @@ public class Employee {
         this.department = department;
     }
 
-    public int getActivity() {
-        return activity;
+    public BigDecimal getSalary() {
+        return salary;
     }
 
-    public void setActivity(int activity) {
-        this.activity = activity;
-    }
-
-    public int getAttendance() {
-        return attendance;
-    }
-
-    public void setAttendance(int attendance) {
-        this.attendance = attendance;
-    }
-
-    
-    public void setSalary(int salary) {
+    public void setSalary(BigDecimal salary) {
         this.salary = salary;
     }
 
-    public int getSalary() {
-        return salary;
+    
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+   
+
+    public List<Integer> getManagedEmployeeIds() {
+        return managedEmployeeIds;
+    }
+
+    public void setManagedEmployeeIds(List<Integer> managedEmployeeIds) {
+        this.managedEmployeeIds = managedEmployeeIds;
     }
     
-    public void giveFeedback()
-    {
-        
+
+    // Business methods
+    public void giveFeedback() {
+        // Implementation here
     }
-    
-    public void receiveFeedback()
-    {
-        
+
+    public void receiveFeedback() {
+        // Implementation here
     }
-    
-    public void readAnnouncement()
-    {
-        
+
+    public void readAnnouncement() {
+        // Implementation here
     }
-    
 }
