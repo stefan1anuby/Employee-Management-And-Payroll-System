@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -49,7 +50,7 @@ export function SignInView() {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+              <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" name="showPassword">
                 <Iconify icon={showPassword ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
               </IconButton>
             </InputAdornment>
@@ -94,11 +95,17 @@ export function SignInView() {
         </Typography>
       </Divider>
 
-      <Box gap={1} display="flex" justifyContent="center">
-        <IconButton color="inherit">
-          <Iconify icon="logos:google-icon" />
-        </IconButton>
-      </Box>
+      <Box display="flex" justifyContent="center">
+  <Button 
+    variant="outlined" 
+    color="inherit" 
+    startIcon={<Iconify icon="logos:google-icon" />} 
+    
+  >
+    Sign in with Google
+  </Button>
+</Box>
+
     </>
   );
 }
