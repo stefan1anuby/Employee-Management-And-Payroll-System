@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.uaic.server.tests;
+package com.uaic.server;
 
-import com.uaic.server.entities.User;
-import com.uaic.server.repositories.UserRepository;
+import com.uaic.server.model.User;
+import com.uaic.server.repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +18,17 @@ import java.util.Optional;
 
 // Repository Pattern : Implementarea UserRepository
 public class InMemoryUserRepository implements UserRepository {
-    
-     private static final List<User> list = new ArrayList<>();
-    
-     // Singleton Design Pattern, folosit pentru a asigura ca aceasta  clasa va avea doar o singura instanta ce poate fi accesata global.
+
+    private static final List<User> list = new ArrayList<>();
+
+    // Singleton Design Pattern, folosit pentru a asigura ca aceasta clasa va avea
+    // doar o singura instanta ce poate fi accesata global.
     // Instanta Singleton
     private static InMemoryUserRepository instance;
 
     // Constructor privat ca sa asiguram instantierea o singura data;
-    private InMemoryUserRepository() { }
+    private InMemoryUserRepository() {
+    }
 
     // Metoda pentru a accesa instanta Singleton
     public static InMemoryUserRepository getInstance() {
@@ -35,22 +38,16 @@ public class InMemoryUserRepository implements UserRepository {
         return instance;
     }
 
-   
-
-   
-    
-    
-  
     @Override
-    public User findByUsername(String username) {
-        
-        return list.stream()
-                   .filter(user -> user.getUsername().equals(username))
-                   .findFirst()
-                   .orElse(null); 
+    public Optional<User> findByUsername(String username) {
+
+        return Optional.of(list.stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst()
+                .orElse(null));
     }
 
-   @Override
+    @Override
     public <S extends User> S save(S entity) {
         list.add(entity);
         return entity;
@@ -65,8 +62,8 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(Integer id) {
         return list.stream()
-                   .filter(user -> user.getId().equals(id))
-                   .findFirst();
+                .filter(user -> user.getId().equals(id))
+                .findFirst();
     }
 
     @Override
@@ -99,6 +96,11 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public void deleteByUsername(String username) {
+        list.removeIf(user -> user.getUsername().equals(username));
+    }
+
+    @Override
     public void delete(User entity) {
         list.remove(entity);
     }
@@ -119,5 +121,5 @@ public class InMemoryUserRepository implements UserRepository {
     public void deleteAll() {
         list.clear();
     }
-    
+
 }

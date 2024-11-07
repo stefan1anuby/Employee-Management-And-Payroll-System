@@ -2,18 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.uaic.server.entities;
+package com.uaic.server.model;
 
 /**
  *
  * @author G
  */
-public class Manager extends Employee{
-    
+public class Manager extends Employee {
+
     String team;
     String companyBankAccount;
-    
-    public Manager(Integer id, String name, String email, String role, String department, int salary, String team, String bankAccount) {
+
+    public Manager(Integer id, String name, String email, String role, String department, int salary, String team,
+            String bankAccount) {
         super(id, name, email, role, department, salary);
         this.team = team;
         this.companyBankAccount = bankAccount;
@@ -34,16 +35,15 @@ public class Manager extends Employee{
     public void setCompanyBankAccount(String companyBankAccount) {
         this.companyBankAccount = companyBankAccount;
     }
-    
-    // urmeaza sa folosesc Observer aici, pentru a notifica ceilalti angajati in legatura cu anunturile
-    public void postAnnouncement()
-    {
-        
+
+    // urmeaza sa folosesc Observer aici, pentru a notifica ceilalti angajati in
+    // legatura cu anunturile
+    public void postAnnouncement() {
+
     }
-    public void promoteEmployee()
-    {
-        
+
+    public void promoteEmployee() {
+
     }
-    
-    
+
 }
