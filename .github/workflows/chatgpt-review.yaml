@@ -1,0 +1,16 @@
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  code_review_job:
+    runs-on: ubuntu-latest
+    name: ChatGPT Code Review
+    steps:
+      - name: GenAI Code Review
+        uses: Jonghakseo/gpt-pr-github-actions@v1
+        with:
+          openai_api_key: ${{ secrets.openai_api_key }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_pr_id: ${{ github.event.number }}
+      
