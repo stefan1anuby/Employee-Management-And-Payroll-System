@@ -22,7 +22,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws IOException, ServletException {
         // Extract user information from the authentication object
         DefaultOAuth2User oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
         String userId = oauthUser.getAttribute("sub"); // For Google, "sub" is the unique user ID

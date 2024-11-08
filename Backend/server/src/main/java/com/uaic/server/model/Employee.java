@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.uaic.server.entities;
+package com.uaic.server.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -88,7 +88,6 @@ public class Employee {
         this.attendance = attendance;
     }
 
-    
     public void setSalary(int salary) {
         this.salary = salary;
     }
@@ -96,20 +95,17 @@ public class Employee {
     public int getSalary() {
         return salary;
     }
-    
-    public void giveFeedback()
-    {
-        
+
+    public void giveFeedback() {
+
     }
-    
-    public void receiveFeedback()
-    {
-        
+
+    public void receiveFeedback() {
+
     }
-    
-    public void readAnnouncement()
-    {
-        
+
+    public void readAnnouncement() {
+
     }
-    
+
 }
