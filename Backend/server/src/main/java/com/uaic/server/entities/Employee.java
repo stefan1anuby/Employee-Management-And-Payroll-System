@@ -14,6 +14,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,7 +37,11 @@ public class Employee {
     private String email;
     
     private String phoneNumber;
-    private String department;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
     
     private BigDecimal salary;
     private String team;
@@ -62,7 +67,7 @@ public class Employee {
     public Employee() {}
 
     public Employee(Integer id, String name, String email, String phoneNumber, Role role,
-                    String department, BigDecimal salary, String team, 
+                    Department department, BigDecimal salary, String team, 
                     List<Integer> managedEmployeeIds) {
         this.id = id;
         this.name = name;
@@ -116,11 +121,11 @@ public class Employee {
         this.role = role;
     }
 
-    public String getDepartment() {
+    public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 
