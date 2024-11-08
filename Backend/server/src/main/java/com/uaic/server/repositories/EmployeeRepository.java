@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,15 +17,15 @@ import org.springframework.stereotype.Repository;
  * @author G
  */
 @Repository
-public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     // Find by role
     List<Employee> findByRole(Employee.Role role);
 
     // Find by email (useful if emails are unique)
     Optional<Employee> findByEmail(String email);
 
-    // Custom method to find employees by department
-    List<Employee> findByDepartment(String department);
+//    // Custom method to find employees by department
+//    List<Employee> findByDepartment(String department);
 
     // Find by phone number
     Optional<Employee> findByPhoneNumber(String phoneNumber);
@@ -38,6 +39,16 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
 
     // Custom method to find employees managed by a specific manager
     List<Employee> findByManagedEmployeeIdsContains(Integer managedEmployeeId);
+
+    public boolean existsByName(String name);
+
+    public boolean existsByEmail(String email);
+
+    public List<Employee> findByName(String name);
+
+    public void deleteByName(String name);
+
+    public void deleteByEmail(String email);
 
     
 }
