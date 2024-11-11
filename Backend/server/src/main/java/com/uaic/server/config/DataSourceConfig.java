@@ -10,21 +10,21 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfig {
 
-    //TODO: look at EnvironmentConfig.java (and delete this)
-    private void loadEnv(){
-        try{
+    // TODO: look at EnvironmentConfig.java (and delete this)
+    private void loadEnv() {
+        try {
 
-            Dotenv dotenv = Dotenv.configure().directory("../../").load();
+            Dotenv dotenv = Dotenv.configure().load();
             dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
-        }
-        catch(Exception e){
+            System.out.println("Read the .env variables");
+        } catch (Exception e) {
             System.out.println("Coudn't read the .env file");
         }
     }
 
     @Bean
     public DataSource dataSource() {
-        // load env variables
+        // Load env variables
         this.loadEnv();
 
         String environment = System.getProperty("STAGE");

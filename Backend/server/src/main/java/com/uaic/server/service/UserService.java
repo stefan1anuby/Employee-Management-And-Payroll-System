@@ -8,38 +8,42 @@ import org.springframework.stereotype.Service;
 import com.uaic.server.model.User;
 import com.uaic.server.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    // public UserService(UserRepository userRepository) {
-    // this.userRepository = userRepository;
-    // }
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
+    @Transactional
     public User createOrUpdateUser(User user) {
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+        return newUser;
     }
 
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Integer id) {
+    public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
-    public void deleteUserById(Integer id) {
+    public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
-    public void deleteUserByUsername(String username) {
-        userRepository.deleteByUsername(username);
+    public void deleteUserByEmail(String email) {
+        userRepository.deleteByEmail(email);
     }
 
 }

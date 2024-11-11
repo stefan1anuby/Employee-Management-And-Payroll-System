@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import com.uaic.server.model.User;
 import com.uaic.server.repository.UserRepository;
 
-@ActiveProfiles("test")
 @DataJpaTest
 public class UserRepositoryTest {
 
@@ -21,26 +22,32 @@ public class UserRepositoryTest {
 
     @Test
     public void testSaveUser() {
-        User newUser = new User(1, "Antoniu", "adsjiojgad");
+        LocalDateTime currentTime = LocalDateTime.now();
+        String email = "emailaddress@gmail.com";
+        User newUser = new User(email, email.substring(0, email.indexOf('@')), currentTime);
         User savedUser = userRepository.save(newUser);
         assertEquals(newUser.getId(), savedUser.getId());
-        assertEquals(newUser.getUsername(), savedUser.getUsername());
+        assertEquals(newUser.getEmail(), savedUser.getEmail());
     }
 
     @Test
     public void testFindById() {
-        assertFalse(userRepository.findById(1).isPresent());
-        User newUser = new User(1, "Antoniu", "adsjiojgad");
+        LocalDateTime currentTime = LocalDateTime.now();
+        String email = "emailaddress@gmail.com";
+        User newUser = new User(email, email.substring(0, email.indexOf('@')), currentTime);
+        assertFalse(userRepository.findByEmail(email).isPresent());
         userRepository.save(newUser);
-        assertTrue(userRepository.findById(1).isPresent());
+        assertTrue(userRepository.findByEmail(email).isPresent());
     }
 
     @Test
     public void testDeleteById() {
-        User newUser = new User(1, "Antoniu", "adsjiojgad");
+        LocalDateTime currentTime = LocalDateTime.now();
+        String email = "emailaddress@gmail.com";
+        User newUser = new User(email, email.substring(0, email.indexOf('@')), currentTime);
         userRepository.save(newUser);
-        userRepository.deleteById(1);
-        assertFalse(userRepository.findById(1).isPresent());
+        userRepository.deleteByEmail(email);
+        assertFalse(userRepository.findByEmail(email).isPresent());
     }
 
 }

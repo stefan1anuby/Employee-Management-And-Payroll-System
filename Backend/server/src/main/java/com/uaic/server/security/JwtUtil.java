@@ -18,18 +18,20 @@ public class JwtUtil {
     private final long ACCESS_TOKEN_EXPIRATION = 3600000; // 1 hour
     private final long REFRESH_TOKEN_EXPIRATION = 86400000; // 1 day
 
-    public String createAccessToken(String userId) {
+    public String createAccessToken(String userId, String email) {
         return Jwts.builder()
                 .setSubject(userId)
+                .claim("email", email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
 
-    public String createRefreshToken(String userId) {
+    public String createRefreshToken(String userId, String email) {
         return Jwts.builder()
                 .setSubject(userId)
+                .claim("email", email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)

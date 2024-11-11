@@ -19,17 +19,16 @@ public class UserController {
 
         // Check if the user is authenticated
         if (authentication != null && authentication.isAuthenticated()) {
-            String userId = (String) authentication.getPrincipal(); // Extract the user ID (subject) from the principal
+            String userId = (String) authentication.getPrincipal();
+            // Extract the user ID (subject) from the principal
 
             // Return user information as a response (you can customize this as needed)
             return Map.of(
                     "userId", userId,
                     "authorities", authentication.getAuthorities(),
-                    "details", authentication.getDetails()
-            );
+                    "details", authentication.getDetails());
         } else {
             return Map.of("error", "User is not authenticated");
         }
     }
 }
-

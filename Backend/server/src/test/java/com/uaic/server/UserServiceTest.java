@@ -11,6 +11,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+
 import com.uaic.server.model.User;
 import com.uaic.server.repository.UserRepository;
 import com.uaic.server.service.UserService;
@@ -27,8 +29,11 @@ public class UserServiceTest {
 
     @Test
     public void testCreateOrUpdateUser() {
-        User newUser = new User(1, "Antoniu", "agssdafgfsdh");
-        when(userRepository.save(any(User.class))).thenReturn(new User(1, "Antoniu", "agssdafgfsdh"));
+        LocalDateTime currentTime = LocalDateTime.now();
+        String email = "emailaddress@gmail.com";
+        User newUser = new User(email, email.substring(0, email.indexOf('@')), currentTime);
+        when(userRepository.save(any(User.class)))
+                .thenReturn(new User(email, email.substring(0, email.indexOf('@')), currentTime));
         User savedUser = userService.createOrUpdateUser(newUser);
         assertThat(savedUser).isNotNull();
         verify(userRepository).save(any(User.class));
@@ -36,9 +41,11 @@ public class UserServiceTest {
 
     @Test
     public void testDeleteUser() {
-        User newUser = new User(1, "Antoniu", "gfdusbgdsuf");
+        LocalDateTime currentTime = LocalDateTime.now();
+        String email = "emailaddress@gmail.com";
+        User newUser = new User(email, email.substring(0, email.indexOf('@')), currentTime);
         User savedUser = userService.createOrUpdateUser(newUser);
-        userService.deleteUserById(newUser.getId());
+        userService.deleteUserByEmail(newUser.getEmail());
         assertThat(savedUser).isNull();
     }
 
