@@ -3,32 +3,21 @@ package com.uaic.server.config;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
 @Configuration
+@DependsOn("environmentConfig")
 public class DataSourceConfig {
 
-    //TODO: look at EnvironmentConfig.java (and delete this)
-    private void loadEnv(){
-        try{
-
-            Dotenv dotenv = Dotenv.configure().directory("../../").load();
-            dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
-        }
-        catch(Exception e){
-            System.out.println("Coudn't read the .env file");
-        }
-    }
 
     @Bean
     public DataSource dataSource() {
-        // load env variables
-        this.loadEnv();
-
+        
         String environment = System.getProperty("STAGE");
-        if (environment == null || environment.equalsIgnoreCase("test")) {
+        if (environment.equalsIgnoreCase("test")) {
             // Configure an in-memory H2 database for testing
             DriverManagerDataSource dataSource = new DriverManagerDataSource();
             dataSource.setDriverClassName("org.h2.Driver");

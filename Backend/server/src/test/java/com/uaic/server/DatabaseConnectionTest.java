@@ -1,6 +1,7 @@
 package com.uaic.server;
 
 import com.uaic.server.config.DataSourceConfig;
+import com.uaic.server.config.EnvironmentConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +11,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 
 @SpringBootTest
-@ContextConfiguration(classes = DataSourceConfig.class)
+@ContextConfiguration(classes = {EnvironmentConfig.class, DataSourceConfig.class})
 public class DatabaseConnectionTest {
 
     @Autowired
