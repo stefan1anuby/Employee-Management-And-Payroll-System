@@ -17,7 +17,8 @@ public class DataSourceConfig {
     public DataSource dataSource() {
         
         String environment = System.getProperty("STAGE");
-        if (environment.equalsIgnoreCase("test")) {
+        // TODO: delete the null check and find ways to "inject" variables during build phase
+        if (environment == null || environment.equalsIgnoreCase("test")) {
             // Configure an in-memory H2 database for testing
             DriverManagerDataSource dataSource = new DriverManagerDataSource();
             dataSource.setDriverClassName("org.h2.Driver");
