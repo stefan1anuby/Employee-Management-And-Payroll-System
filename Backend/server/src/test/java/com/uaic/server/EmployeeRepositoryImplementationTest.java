@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.uaic.server;
+import com.uaic.server.aspects.EmployeeAspect;
 import com.uaic.server.repositories.EmployeeRepository;
 
 import com.uaic.server.entities.Employee;
@@ -18,8 +19,14 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
 
 @ExtendWith(SpringExtension.class)
+@Import(EmployeeAspect.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Use H2 in-memory database
 public class EmployeeRepositoryImplementationTest {
@@ -28,6 +35,9 @@ public class EmployeeRepositoryImplementationTest {
     private EmployeeRepository employeeRepository;
 
     private Employee testEmployee;
+    @SpyBean  // Spy on the aspect to capture its behavior
+    private EmployeeAspect employeeAspect;
+
 
     @BeforeEach
     public void setUp() {
@@ -40,7 +50,9 @@ public class EmployeeRepositoryImplementationTest {
         testEmployee.setRole(Employee.Role.MANAGER);
         testEmployee.setTeam("Dev Team");
         // Save the test employee to the database
+        
         employeeRepository.save(testEmployee);
+        
     }
 
     @Test
@@ -55,8 +67,12 @@ public class EmployeeRepositoryImplementationTest {
         newEmployee.setTeam("Marketing Team");
 
         Employee savedEmployee = employeeRepository.save(newEmployee);
+
         assertThat(savedEmployee.getId()).isNotNull();
         assertThat(savedEmployee.getName()).isEqualTo("Jane Smith");
+        
+        
+        
     }
 
     @Test

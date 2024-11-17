@@ -1,5 +1,6 @@
 package com.uaic.server;
 
+import com.uaic.server.aspects.DepartmentAspect;
 import com.uaic.server.entities.Department;
 import com.uaic.server.repositories.DepartmentRepository;
 import java.util.Optional;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -17,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @author G
  */
 @ExtendWith(SpringExtension.class)
+@Import(DepartmentAspect.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Use H2 in-memory database
 public class DepartmentRepositoryTest {
@@ -24,6 +28,9 @@ public class DepartmentRepositoryTest {
     @Autowired
     private DepartmentRepository departmentRepository;
     private Department testDepartment;
+    
+    @SpyBean  // Spy on the aspect to capture its behavior
+    private DepartmentAspect departmentAspect;
     
      @BeforeEach
     public void setUp() {
