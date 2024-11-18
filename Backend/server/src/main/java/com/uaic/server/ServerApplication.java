@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @SpringBootApplication
-@EntityScan("com.uaic.server.model")
-@EnableJpaRepositories("com.uaic.server.repository")
+@EntityScan("com.uaic.server.entities")
+@EnableJpaRepositories("com.uaic.server.repositories")
 @EnableWebSecurity
 public class ServerApplication {
 

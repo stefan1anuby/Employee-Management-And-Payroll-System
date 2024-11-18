@@ -11,8 +11,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.uaic.server.model.User;
-import com.uaic.server.service.UserService;
+import com.uaic.server.entities.User;
+import com.uaic.server.services.UserService;
 
 import java.io.IOException;
 import java.net.URI;
@@ -38,21 +38,23 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         DefaultOAuth2User oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
         String userId = oauthUser.getAttribute("sub"); // For Google, "sub" is the unique user ID
         String email = oauthUser.getAttribute("email");
+        String name = oauthUser.getAttribute("name");
 
         // Create a new user and set the data
-        User authenticatedUser = new User();
-        authenticatedUser.setEmail(email);
-        authenticatedUser.setName(email.substring(0, email.indexOf('@')));
-        authenticatedUser.setRegisterDate(LocalDateTime.now());
+        LocalDateTime registerTime = LocalDateTime.now();
+        User authenticatedUser = new User(email, name, registerTime);
 
-        // Store the user in the database if it isn't registered
+        // Store the user in the database if it isn't registered or update the date of
+        // the last login otherwise
         if (userService.getUserByEmail(email).isEmpty()) {
-            userService.createOrUpdateUser(authenticatedUser);
-        }
+            userService.createUser(authenticatedUser);
+        } // else {
+          // userService.updateUser(authenticatedUser);
+          // }
 
         // Generate JWTs using user ID or email
-        String accessToken = jwtUtil.createAccessToken(userId, email);
-        String refreshToken = jwtUtil.createRefreshToken(userId, email);
+        String accessToken = jwtUtil.createAccessToken(userId, email, name);
+        String refreshToken = jwtUtil.createRefreshToken(userId, email, name);
 
         // Redirect to the frontend with JWTs as query parameters
         URI redirectUri = UriComponentsBuilder.fromUriString("http://localhost:3000")

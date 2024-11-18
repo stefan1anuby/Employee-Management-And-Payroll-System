@@ -1,4 +1,4 @@
-package com.uaic.server.model;
+package com.uaic.server.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,9 +16,11 @@ public class User {
      @Id
      @GeneratedValue(strategy = GenerationType.AUTO)
      private UUID id;
+     private String userId;
      private String email;
      private String name;
      private LocalDateTime registerDate;
+     private LocalDateTime expirationDate;
 
      public User() {
      }
@@ -33,6 +35,10 @@ public class User {
           return id;
      }
 
+     public String getUserId() {
+          return userId;
+     }
+
      public String getEmail() {
           return email;
      }
@@ -45,8 +51,12 @@ public class User {
           return registerDate;
      }
 
-     public void setId(UUID id) {
-          this.id = id;
+     public LocalDateTime getExpirationDate() {
+          return expirationDate;
+     }
+
+     public void setUserId(String userId) {
+          this.userId = userId;
      }
 
      public void setEmail(String email) {
@@ -57,8 +67,8 @@ public class User {
           this.name = name;
      }
 
-     public void setRegisterDate(LocalDateTime registerDate) {
-          this.registerDate = registerDate;
+     public void setExpirationDate(LocalDateTime expirationDate) {
+          this.expirationDate = expirationDate;
      }
 
 }

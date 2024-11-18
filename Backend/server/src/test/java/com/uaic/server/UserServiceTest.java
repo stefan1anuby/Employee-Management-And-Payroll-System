@@ -13,9 +13,9 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 
-import com.uaic.server.model.User;
-import com.uaic.server.repository.UserRepository;
-import com.uaic.server.service.UserService;
+import com.uaic.server.entities.User;
+import com.uaic.server.repositories.UserRepository;
+import com.uaic.server.services.UserService;
 
 @ExtendWith(MockitoExtension.class)
 // @SpringBootTest
@@ -34,7 +34,7 @@ public class UserServiceTest {
         User newUser = new User(email, email.substring(0, email.indexOf('@')), currentTime);
         when(userRepository.save(any(User.class)))
                 .thenReturn(new User(email, email.substring(0, email.indexOf('@')), currentTime));
-        User savedUser = userService.createOrUpdateUser(newUser);
+        User savedUser = userService.createUser(newUser);
         assertThat(savedUser).isNotNull();
         verify(userRepository).save(any(User.class));
     }
@@ -44,7 +44,7 @@ public class UserServiceTest {
         LocalDateTime currentTime = LocalDateTime.now();
         String email = "emailaddress@gmail.com";
         User newUser = new User(email, email.substring(0, email.indexOf('@')), currentTime);
-        User savedUser = userService.createOrUpdateUser(newUser);
+        User savedUser = userService.createUser(newUser);
         userService.deleteUserByEmail(newUser.getEmail());
         assertThat(savedUser).isNull();
     }

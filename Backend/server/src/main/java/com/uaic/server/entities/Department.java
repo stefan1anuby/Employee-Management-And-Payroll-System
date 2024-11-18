@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.uaic.server.model;
+package com.uaic.server.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

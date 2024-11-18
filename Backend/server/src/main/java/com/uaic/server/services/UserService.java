@@ -1,12 +1,12 @@
-package com.uaic.server.service;
+package com.uaic.server.services;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.uaic.server.model.User;
-import com.uaic.server.repository.UserRepository;
+import com.uaic.server.entities.User;
+import com.uaic.server.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -21,7 +21,12 @@ public class UserService {
     }
 
     @Transactional
-    public User createOrUpdateUser(User user) {
+    public User createUser(User user) {
+        User newUser = userRepository.save(user);
+        return newUser;
+    }
+
+    public User updateUser(User user) {
         User newUser = userRepository.save(user);
         return newUser;
     }

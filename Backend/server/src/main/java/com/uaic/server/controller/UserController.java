@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uaic.server.entities.User;
+
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -19,15 +22,26 @@ public class UserController {
 
         // Check if the user is authenticated
         if (authentication != null && authentication.isAuthenticated()) {
-            String userId = (String) authentication.getPrincipal();
-            // Extract the user ID (subject) from the principal
+            System.out.println("Is authenticated");
+            System.out.println("The principal " + authentication.getPrincipal());
+            User authenticatedUser = (User) authentication.getPrincipal();
+            String userId = authenticatedUser.getUserId();
+            String name = authenticatedUser.getName();
+            String email = authenticatedUser.getEmail();
+            LocalDateTime registerDate = authenticatedUser.getRegisterDate();
+            LocalDateTime expirationDate = authenticatedUser.getExpirationDate();
 
             // Return user information as a response (you can customize this as needed)
             return Map.of(
                     "userId", userId,
+                    "name", name,
+                    "email", email,
+                    "registerDate", registerDate,
+                    "expirationDate", expirationDate,
                     "authorities", authentication.getAuthorities(),
                     "details", authentication.getDetails());
         } else {
+            System.out.println("Is not authenticated");
             return Map.of("error", "User is not authenticated");
         }
     }
