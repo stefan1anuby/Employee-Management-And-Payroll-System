@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { getGoogleAuthURL } from 'src/utils/auth';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -97,6 +98,9 @@ export function SignInView() {
 
       <Box display="flex" justifyContent="center">
   <Button 
+    onClick={() => {
+      window.location.href = getGoogleAuthURL();
+    }}
     variant="outlined" 
     color="inherit" 
     startIcon={<Iconify icon="logos:google-icon" />} 
