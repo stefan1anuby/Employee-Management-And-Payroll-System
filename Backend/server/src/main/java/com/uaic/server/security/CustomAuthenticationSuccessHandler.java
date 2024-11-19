@@ -44,13 +44,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         LocalDateTime registerTime = LocalDateTime.now();
         User authenticatedUser = new User(email, name, registerTime);
 
-        // Store the user in the database if it isn't registered or update the date of
-        // the last login otherwise
+        // Store the user in the database if it isn't registered
         if (userService.getUserByEmail(email).isEmpty()) {
             userService.createUser(authenticatedUser);
-        } // else {
-          // userService.updateUser(authenticatedUser);
-          // }
+        }
 
         // Generate JWTs using user ID or email
         String accessToken = jwtUtil.createAccessToken(userId, email, name);

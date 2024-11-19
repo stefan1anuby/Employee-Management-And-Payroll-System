@@ -22,8 +22,6 @@ public class UserController {
 
         // Check if the user is authenticated
         if (authentication != null && authentication.isAuthenticated()) {
-            System.out.println("Is authenticated");
-            System.out.println("The principal " + authentication.getPrincipal());
             User authenticatedUser = (User) authentication.getPrincipal();
             String userId = authenticatedUser.getUserId();
             String name = authenticatedUser.getName();
@@ -41,7 +39,6 @@ public class UserController {
                     "authorities", authentication.getAuthorities(),
                     "details", authentication.getDetails());
         } else {
-            System.out.println("Is not authenticated");
             return Map.of("error", "User is not authenticated");
         }
     }

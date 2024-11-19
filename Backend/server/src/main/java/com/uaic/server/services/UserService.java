@@ -26,11 +26,6 @@ public class UserService {
         return newUser;
     }
 
-    public User updateUser(User user) {
-        User newUser = userRepository.save(user);
-        return newUser;
-    }
-
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }

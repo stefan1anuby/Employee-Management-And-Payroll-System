@@ -19,17 +19,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+    public SecurityFilterChain loginFilterChain(HttpSecurity http) throws Exception {
+        http.securityMatcher("/login", "/oauth2/**", "/login/oauth2/**")
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login/oauth2/**", "/auth-success", "/api/user-info").permitAll() // Allow
-                                                                                                            // login
-                                                                                                            // paths
-                        .anyRequest().authenticated() // Require authentication for other paths
+                        .anyRequest().permitAll() // deny everything else except login
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(customAuthenticationSuccessHandler) // Use custom success handler for JWT
                                                                             // generation
+                );
+        return http.build();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.securityMatcher("/**")
+                .authorizeHttpRequests(authz -> authz
+                        .anyRequest().authenticated() // Require authentication for other paths
                 );
 
         // Add JwtAuthenticationFilter before the default
