@@ -6,30 +6,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/employee")
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/info")
-    public Iterable<Employee> getEmployee() {
+    @GetMapping
+    public Iterable<Employee> getEmployees() {
         return employeeService.findEmployees();
     }
 
+    @GetMapping("/{id}")
+    public Employee getEmployee(@PathVariable Integer id) {
+        return employeeService.findEmployeeById(id).isPresent()? employeeService.findEmployeeById(id).get(): null;
+    }
 
-    @PostMapping("/add")
-    public void addEmployee(@RequestBody Employee employee) {
+    @PostMapping("{id}")
+    public void addEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
+        employee.setId(id);
         employeeService.createOrUpdateEmployee(employee);
     }
 
-    @PutMapping("/update")
-    public void updateEmployee(@RequestBody Employee employee) {
+    @PutMapping("/{id}")
+    public void updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
+        employee.setId(id);
         employeeService.createOrUpdateEmployee(employee);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteEmployee(@RequestParam Integer employeeId) {
-        employeeService.deleteEmployeeById(employeeId);
+    @DeleteMapping("/{id}")
+    public void deleteEmployee(@PathVariable Integer id) {
+        employeeService.deleteEmployeeById(id);
     }
 }
