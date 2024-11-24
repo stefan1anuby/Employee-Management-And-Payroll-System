@@ -20,26 +20,24 @@ import java.util.List;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="department_id")
+    @Column(name = "department_id")
     private Integer id;
-    
+
     private String name;
     private String location;
-    
+
     @OneToMany(mappedBy = "department")
     private List<Employee> employees;
 
     public Department() {
     }
-    
+
     public Department(Integer id, String name, String location, List<Employee> employees) {
         this.id = id;
         this.name = name;
         this.location = location;
         this.employees = employees;
     }
-    
-    
 
     public Integer getId() {
         return id;
@@ -72,5 +70,5 @@ public class Department {
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
-    
+
 }

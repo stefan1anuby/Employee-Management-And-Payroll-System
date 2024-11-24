@@ -11,6 +11,7 @@ public class EnvironmentConfig {
     @PostConstruct
     public void loadEnvVariables() {
         System.out.println("Trying to load environment variables.");
+
         try {
             // Load the .env file located in the specified directory
             Dotenv dotenv = Dotenv.configure().directory("../../").load();
@@ -24,4 +25,5 @@ public class EnvironmentConfig {
             e.printStackTrace();
         }
     }
+
 }
