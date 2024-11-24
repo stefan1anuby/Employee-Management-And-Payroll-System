@@ -27,6 +27,12 @@ public class JwtUtil {
     private final long ACCESS_TOKEN_EXPIRATION = 3600000; // 1 hour
     private final long REFRESH_TOKEN_EXPIRATION = 86400000; // 1 day
 
+    public enum TokenStatus {
+        VALID,
+        INVALID,
+        EXPIRED
+    }
+
     public String createAccessToken(String userId, String email, String name) {
         return Jwts.builder()
                 .setSubject(userId)
@@ -49,17 +55,17 @@ public class JwtUtil {
                 .compact();
     }
 
-    public int validateToken(String token) {
+    public TokenStatus validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(SECRET_KEY)
                     .build()
                     .parseClaimsJws(token);
-            return 0;
+            return TokenStatus.VALID;
         } catch (ExpiredJwtException e) {
-            return 1;
+            return TokenStatus.EXPIRED;
         } catch (JwtException | IllegalArgumentException e) {
-            return 2;
+            return TokenStatus.INVALID;
         }
     }
 

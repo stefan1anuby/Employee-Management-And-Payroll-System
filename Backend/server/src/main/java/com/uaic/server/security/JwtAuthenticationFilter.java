@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.uaic.server.entities.User;
+import com.uaic.server.security.JwtUtil.TokenStatus;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -33,13 +34,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
             @NonNull FilterChain chain) throws ServletException, IOException {
 
-        String accessToken = getToken(request, "Authorization");
-        String refreshToken = null;
-        if (accessToken == null)
-            accessToken = request.getParameter("access_token");
-        if (refreshToken == null)
-            refreshToken = request.getParameter("refresh_token");
-        if (jwtUtil.validateToken(accessToken) == 0) {
+        String accessToken = request.getParameter("access_token");
+        String refreshToken = request.getParameter("refresh_token");
+        if (jwtUtil.validateToken(accessToken) == TokenStatus.VALID) {
             Claims accessClaims = jwtUtil.extractClaims(accessToken);
             User newUser = extractUserFromToken(accessClaims);
             if (accessClaims.getSubject() != null && (SecurityContextHolder.getContext().getAuthentication() == null ||
@@ -50,8 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } else if (jwtUtil.validateToken(accessToken) == 1) {
-            if (jwtUtil.validateToken(refreshToken) == 0) {
+        } else if (jwtUtil.validateToken(accessToken) == TokenStatus.EXPIRED) {
+            if (jwtUtil.validateToken(refreshToken) == TokenStatus.VALID) {
                 Claims refreshClaims = jwtUtil.extractClaims(refreshToken);
                 String refreshUserId = refreshClaims.getSubject();
                 String refreshEmail = refreshClaims.get("email", String.class);
@@ -75,14 +72,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         chain.doFilter(request, response);
-    }
-
-    private String getToken(HttpServletRequest request, String headerName) {
-        String authorizationHeader = request.getHeader(headerName);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.substring(7);
-        } else
-            return null;
     }
 
     private User extractUserFromToken(Claims claims) {

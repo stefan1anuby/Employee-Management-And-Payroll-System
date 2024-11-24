@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -22,6 +23,12 @@ import java.time.LocalDateTime;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+
+    @Value("${redirect.base-uri}")
+    private String baseUri;
+
+    @Value("${redirect.path}")
+    private String path;
 
     public CustomAuthenticationSuccessHandler(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -54,8 +61,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String refreshToken = jwtUtil.createRefreshToken(userId, email, name);
 
         // Redirect to the frontend with JWTs as query parameters
-        URI redirectUri = UriComponentsBuilder.fromUriString("http://localhost:3000")
-                .path("/auth-success")
+        URI redirectUri = UriComponentsBuilder.fromUriString(baseUri)
+                .path(path)
                 .queryParam("access_token", accessToken)
                 .queryParam("refresh_token", refreshToken)
                 .build()

@@ -9,39 +9,41 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
-            CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
-        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+        public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
+                        CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+                this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+                this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        }
 
-    @Bean
-    public SecurityFilterChain loginFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher("/login", "/oauth2/**", "/login/oauth2/**")
-                .authorizeHttpRequests(authz -> authz
-                        .anyRequest().permitAll() // deny everything else except login
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(customAuthenticationSuccessHandler) // Use custom success handler for JWT
-                                                                            // generation
-                );
-        return http.build();
-    }
+        @Bean
+        public SecurityFilterChain loginFilterChain(HttpSecurity http) throws Exception {
+                http.securityMatcher("/login", "/oauth2/**", "/login/oauth2/**")
+                                .authorizeHttpRequests(authz -> authz
+                                                .anyRequest().permitAll() // deny everything else except login
+                                )
+                                .oauth2Login(oauth2 -> oauth2
+                                                .successHandler(customAuthenticationSuccessHandler) // Use custom
+                                                                                                    // success handler
+                                                                                                    // for JWT
+                                                                                                    // generation
+                                );
+                return http.build();
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher("/**")
-                .authorizeHttpRequests(authz -> authz
-                        .anyRequest().authenticated() // Require authentication for other paths
-                );
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http.securityMatcher("/**")
+                                .authorizeHttpRequests(authz -> authz
+                                                .anyRequest().authenticated() // Require authentication for other paths
+                                );
 
-        // Add JwtAuthenticationFilter before the default
-        // UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                // Add JwtAuthenticationFilter before the default
+                // UsernamePasswordAuthenticationFilter
+                http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+                return http.build();
+        }
 }
