@@ -152,6 +152,18 @@ public class Employee {
         this.managedEmployeeIds = managedEmployeeIds;
     }
 
+    public List<Integer> getManagedEmployeeIds() {
+        return managedEmployeeIds;
+    }
+
+    public Business getBusiness() {
+        return business;
+    }
+
+
+    public void setBusiness(Business business) {
+        this.business = business;
+    }
     // Business methods
     public void giveFeedback() {
         // Implementation here
