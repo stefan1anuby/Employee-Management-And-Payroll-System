@@ -29,7 +29,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     // Find by phone number
     Optional<Employee> findByPhoneNumber(String phoneNumber);
-
+    Optional<Employee> findByBusinessIdAndId(Long businessId, Integer employeeId);
     
     // Find by team
     List<Employee> findByTeam(String team);
