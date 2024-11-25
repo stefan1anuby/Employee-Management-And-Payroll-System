@@ -3,6 +3,7 @@ package com.uaic.server.services;
 import com.uaic.server.entities.Business;
 import com.uaic.server.entities.Employee;
 import com.uaic.server.repositories.BusinessRepository;
+import com.uaic.server.repositories.EmployeeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class BusinessService {
     @Autowired
     private BusinessRepository businessRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
     // Create a new business
     public Business createBusiness(Business business) {
         return businessRepository.save(business);
@@ -28,6 +31,9 @@ public class BusinessService {
         return business.getEmployees();
     }
 
+    public Optional<Employee> getEmployeeByBusinessAndEmployeeId(Long businessId, Integer employeeId) {
+        return employeeRepository.findByBusinessIdAndId(businessId, employeeId);
+    }
     public boolean checkExistentBusinessById(Long id) {
         return businessRepository.existsById(id);
     }
