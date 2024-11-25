@@ -88,5 +88,17 @@ public class EmployeeService {
     public long numberOfEmployees() {
         return employeeRepository.count();
     }
-    
+
+    public Iterable<Employee> findEmployeesByRole(Employee.Role role) {
+        return employeeRepository.findByRole(role);
+    }
+
+
+    public Iterable<Employee> findEmployeesByTeam(String team) {
+        return employeeRepository.findByTeam(team);
+    }
+
+
+
+
 }
