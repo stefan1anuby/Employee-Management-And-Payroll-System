@@ -11,6 +11,6 @@ COPY src src
 RUN ./mvnw package
 FROM openjdk:17-jdk-slim
 
-WORKDIR demo
+WORKDIR /demo
 COPY --from=build target/*.jar demo.jar
 ENTRYPOINT ["java", "-jar", "demo.jar"]

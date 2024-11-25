@@ -13,9 +13,10 @@ import javax.sql.DataSource;
 public class DataSourceConfig {
 
 
+
     @Bean
     public DataSource dataSource() {
-        
+
         String environment = System.getProperty("STAGE");
         // TODO: delete the null check and find ways to "inject" variables during build phase
         if (environment == null || environment.equalsIgnoreCase("test")) {

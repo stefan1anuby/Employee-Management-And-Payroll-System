@@ -30,26 +30,24 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     private String name;
-    
+
     @Column(unique = true)
     private String email;
-    
+
     private String phoneNumber;
-    
-    
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-    
+
     private BigDecimal salary;
     private String team;
 
     // Enum for role with mapping to SQL ENUM type
     @Enumerated(EnumType.STRING)
     private Role role;
-    
 
     // List of managed employee IDs for HR employees
     @ElementCollection
@@ -64,11 +62,12 @@ public class Employee {
 
     // Constructors, getters, setters, and business methods
 
-    public Employee() {}
+    public Employee() {
+    }
 
     public Employee(Integer id, String name, String email, String phoneNumber, Role role,
-                    Department department, BigDecimal salary, String team, 
-                    List<Integer> managedEmployeeIds) {
+            Department department, BigDecimal salary, String team,
+            List<Integer> managedEmployeeIds) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -137,8 +136,6 @@ public class Employee {
         this.salary = salary;
     }
 
-    
-
     public String getTeam() {
         return team;
     }
@@ -147,16 +144,9 @@ public class Employee {
         this.team = team;
     }
 
-   
-
-    public List<Integer> getManagedEmployeeIds() {
-        return managedEmployeeIds;
-    }
-
     public void setManagedEmployeeIds(List<Integer> managedEmployeeIds) {
         this.managedEmployeeIds = managedEmployeeIds;
     }
-    
 
     // Business methods
     public void giveFeedback() {
