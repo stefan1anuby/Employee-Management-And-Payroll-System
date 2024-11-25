@@ -42,6 +42,10 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @ManyToOne
+    @JoinColumn(name = "business_id")
+    private Business business;
+
     private BigDecimal salary;
     private String team;
 
