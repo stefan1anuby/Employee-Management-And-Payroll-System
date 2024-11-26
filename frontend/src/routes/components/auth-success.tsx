@@ -14,8 +14,14 @@ export default function AuthSuccessPage() {
       localStorage.setItem('access_token', accessToken);
       localStorage.setItem('refresh_token', refreshToken);
 
-      // Redirect to a dashboard or home page after successful login
-      navigate('/');
+      // TODO: to check if the user exists in one business or not
+      const hasBusinessAsociated = false;
+      if (hasBusinessAsociated) {
+        navigate("/");
+      }
+      else{
+        navigate("/welcome")
+      }
     } else {
       // If tokens are missing, redirect to sign-in page
       navigate('/sign-in');
