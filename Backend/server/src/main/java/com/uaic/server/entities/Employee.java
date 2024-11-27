@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -28,8 +29,9 @@ import java.util.List;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     private String name;
 
@@ -42,6 +44,10 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @ManyToOne
+    @JoinColumn(name = "business_id")
+    private Business business;
+
     private BigDecimal salary;
     private String team;
 
@@ -53,11 +59,11 @@ public class Employee {
     @ElementCollection
     @CollectionTable(name = "employee_managed_ids", joinColumns = @JoinColumn(name = "employee_id"))
     @Column(name = "managed_employee_id")
-    private List<Integer> managedEmployeeIds;
+    private List<UUID> managedEmployeeIds;
 
     // Enum for role with possible values
     public enum Role {
-        MANAGER, HR
+        MANAGER, HR, ADMIN
     }
 
     // Constructors, getters, setters, and business methods
@@ -65,9 +71,9 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Integer id, String name, String email, String phoneNumber, Role role,
+    public Employee(UUID id, String name, String email, String phoneNumber, Role role,
             Department department, BigDecimal salary, String team,
-            List<Integer> managedEmployeeIds) {
+            List<UUID> managedEmployeeIds) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -80,11 +86,11 @@ public class Employee {
     }
 
     // Getters and setters
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -144,10 +150,22 @@ public class Employee {
         this.team = team;
     }
 
-    public void setManagedEmployeeIds(List<Integer> managedEmployeeIds) {
+    public void setManagedEmployeeIds(List<UUID> managedEmployeeIds) {
         this.managedEmployeeIds = managedEmployeeIds;
     }
 
+    public List<UUID> getManagedEmployeeIds() {
+        return managedEmployeeIds;
+    }
+
+    public Business getBusiness() {
+        return business;
+    }
+
+
+    public void setBusiness(Business business) {
+        this.business = business;
+    }
     // Business methods
     public void giveFeedback() {
         // Implementation here
