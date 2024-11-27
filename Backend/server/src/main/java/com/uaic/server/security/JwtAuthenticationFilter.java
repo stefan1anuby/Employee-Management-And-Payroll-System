@@ -60,18 +60,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void authenticateUser(HttpServletRequest request, String accessToken) {
+        // Extract claims from the JWT access token
         Claims claims = jwtUtil.extractClaims(accessToken);
+
+        // Create a User object based on the claims from the token
         User user = createUserFromClaims(claims);
 
-        if (claims.getSubject() != null &&
-                (SecurityContextHolder.getContext().getAuthentication() == null ||
-                        SecurityContextHolder.getContext().getAuthentication() instanceof OAuth2AuthenticationToken)) {
+        // Create an authentication token with the extracted User object
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(user, null, null);
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(user, null, null);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+        // Set the authentication details based on the current HTTP request
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+        // Store the authentication in the SecurityContextHolder
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
     }
 
     private void handleExpiredAccessToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) throws IOException {

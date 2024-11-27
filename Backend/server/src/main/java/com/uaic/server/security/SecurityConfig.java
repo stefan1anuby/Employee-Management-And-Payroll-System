@@ -20,28 +20,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain loginFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher("/login", "/oauth2/**", "/login/oauth2/**")
+        http.securityMatcher("/login", "/oauth2/**", "/login/oauth2/**", "/swagger-ui/**")
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/**")) // Disable CSRF for /login
                 .authorizeHttpRequests(authz -> authz
-                        .anyRequest().permitAll() // deny everything else except login
+                        .anyRequest().authenticated()         // Authenticate other requests in this chain
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(customAuthenticationSuccessHandler) // Use custom success handler for JWT
                                                                             // generation
                 );
-        return http.build();
-    }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher("/**")
-                .authorizeHttpRequests(authz -> authz
-                        .anyRequest().authenticated() // Require authentication for other paths
-                );
-
-        // Add JwtAuthenticationFilter before the default
-        // UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+        //http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
