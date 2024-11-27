@@ -189,6 +189,8 @@ public class BusinessController {
     // TODO
     @PutMapping("/{businessId}/employees/{employeeId}")
     public ResponseEntity<Void> updateEmployeeInBusiness(@PathVariable UUID businessId, @PathVariable UUID employeeId, @RequestBody Employee employee) {
+
+        // the Employee who makes this call should not be the same Employee who gets the updates, and also to edit something you have to need maybe a HR or ADMIN role?
         Optional<Business> business = businessService.findBusinessById(businessId);
         if (business.isPresent() && employeeService.checkExistentEmployeeById(employeeId)) {
             employee.setId(employeeId);
