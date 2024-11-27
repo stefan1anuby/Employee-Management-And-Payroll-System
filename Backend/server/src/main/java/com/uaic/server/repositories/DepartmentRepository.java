@@ -4,9 +4,6 @@
  */
 package com.uaic.server.repositories;
 import com.uaic.server.entities.Department;
-import com.uaic.server.entities.Employee;
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;

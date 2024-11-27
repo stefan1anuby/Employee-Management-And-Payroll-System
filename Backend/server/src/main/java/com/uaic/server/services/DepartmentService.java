@@ -6,7 +6,6 @@ package com.uaic.server.services;
 
 import com.uaic.server.entities.Department;
 import com.uaic.server.repositories.DepartmentRepository;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
