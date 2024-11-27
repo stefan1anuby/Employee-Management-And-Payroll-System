@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BusinessService {
@@ -25,21 +26,21 @@ public class BusinessService {
     }
 
     // Get all employees in a business
-    public List<Employee> getEmployeesByBusiness(Long businessId) {
+    public List<Employee> getEmployeesByBusiness(UUID businessId) {
         Business business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new EntityNotFoundException("Business not found"));
         return business.getEmployees();
     }
 
-    public Optional<Employee> getEmployeeByBusinessAndEmployeeId(Long businessId, Integer employeeId) {
+    public Optional<Employee> getEmployeeByBusinessAndEmployeeId(UUID businessId, UUID employeeId) {
         return employeeRepository.findByBusinessIdAndId(businessId, employeeId);
     }
-    public boolean checkExistentBusinessById(Long id) {
+    public boolean checkExistentBusinessById(UUID id) {
         return businessRepository.existsById(id);
     }
 
 
-    public Optional<Business> findBusinessById(Long id) {
+    public Optional<Business> findBusinessById(UUID id) {
         return businessRepository.findById(id);
     }
 
@@ -60,7 +61,7 @@ public class BusinessService {
         businessRepository.delete(business);
     }
 
-    public void deleteBusinessById(Long id) {
+    public void deleteBusinessById(UUID id) {
         businessRepository.deleteById(id);
     }
 

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
-public class UserDTO {
+public class UserOutDTO {
     private String userId;
     private String name;
     private String email;
@@ -16,9 +16,9 @@ public class UserDTO {
     private Collection<? extends GrantedAuthority> authorities;
     private Object details;
 
-    public UserDTO(String userId, String name, String email, LocalDateTime registerDate,
-                       LocalDateTime expirationDate, Collection<? extends GrantedAuthority> authorities,
-                       Object details) {
+    public UserOutDTO(String userId, String name, String email, LocalDateTime registerDate,
+                      LocalDateTime expirationDate, Collection<? extends GrantedAuthority> authorities,
+                      Object details) {
         this.userId = userId;
         this.name = name;
         this.email = email;

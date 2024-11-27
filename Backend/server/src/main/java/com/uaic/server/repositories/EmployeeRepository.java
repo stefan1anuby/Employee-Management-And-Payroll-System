@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Repository;
  * @author G
  */
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     // Find by role
     List<Employee> findByRole(Employee.Role role);
 
@@ -28,7 +30,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     // Find by phone number
     Optional<Employee> findByPhoneNumber(String phoneNumber);
-    Optional<Employee> findByBusinessIdAndId(Long businessId, Integer employeeId);
+    Optional<Employee> findByBusinessIdAndId(UUID businessId, UUID employeeId);
     
     // Find by team
     List<Employee> findByTeam(String team);
@@ -37,7 +39,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findBySalaryGreaterThanEqual(BigDecimal salary);
 
     // Custom method to find employees managed by a specific manager
-    List<Employee> findByManagedEmployeeIdsContains(Integer managedEmployeeId);
+    List<Employee> findByManagedEmployeeIdsContains(UUID managedEmployeeId);
 
     public boolean existsByName(String name);
 

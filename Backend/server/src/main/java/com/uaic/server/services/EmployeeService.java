@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.uaic.server.repositories.EmployeeRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -24,7 +26,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public boolean checkExistentEmployeeById(Integer id) {
+    public boolean checkExistentEmployeeById(UUID id) {
         return employeeRepository.existsById(id);
     }
 
@@ -37,7 +39,7 @@ public class EmployeeService {
     }
 
 
-    public Optional<Employee> findEmployeeById(Integer id) {
+    public Optional<Employee> findEmployeeById(UUID id) {
         return employeeRepository.findById(id);
     }
 
@@ -59,7 +61,7 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
-    public void deleteEmployeeById(Integer id) {
+    public void deleteEmployeeById(UUID id) {
         employeeRepository.deleteById(id);
     }
 
@@ -76,7 +78,7 @@ public class EmployeeService {
         employeeRepository.deleteAll(employees);
     }
 
-    public void deleteEmployeesById(Iterable<Integer> ids) {
+    public void deleteEmployeesById(Iterable<UUID> ids) {
         employeeRepository.deleteAllById(ids);
     }
 

@@ -1,8 +1,9 @@
 package com.uaic.server.services;
 
 import java.util.Optional;
+import java.util.UUID;
 
-import com.uaic.server.entities.UserDTO;
+import com.uaic.server.entities.UserOutDTO;
 import com.uaic.server.security.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserDTO getAuthenticatedUserInfo() {
+    public UserOutDTO getAuthenticatedUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Ensure the user is authenticated
@@ -36,7 +37,7 @@ public class UserService {
 
         if (principal instanceof User) {
             User authenticatedUser = (User) principal;
-            return new UserDTO(
+            return new UserOutDTO(
                     authenticatedUser.getUserId(),
                     authenticatedUser.getName(),
                     authenticatedUser.getEmail(),
@@ -60,7 +61,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getUserById(UUID id) {
         return userRepository.findById(id);
     }
 
@@ -68,7 +69,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(UUID id) {
         userRepository.deleteById(id);
     }
 

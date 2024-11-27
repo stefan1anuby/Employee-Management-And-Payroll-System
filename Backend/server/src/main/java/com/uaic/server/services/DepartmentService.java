@@ -7,6 +7,8 @@ package com.uaic.server.services;
 import com.uaic.server.entities.Department;
 import com.uaic.server.repositories.DepartmentRepository;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -24,7 +26,7 @@ public class DepartmentService {
 
     
 
-    public boolean checkExistentDepartmentById(Integer id) {
+    public boolean checkExistentDepartmentById(UUID id) {
         return departmentRepository.existsById(id);
     }
 
@@ -33,7 +35,7 @@ public class DepartmentService {
     }
 
     
-    public Optional<Department> findDepartmentById(Integer id) {
+    public Optional<Department> findDepartmentById(UUID id) {
         return departmentRepository.findById(id);
     }
 
@@ -47,7 +49,7 @@ public class DepartmentService {
         departmentRepository.delete(department);
     }
 
-    public void deleteDepartmentById(Integer id) {
+    public void deleteDepartmentById(UUID id) {
         departmentRepository.deleteById(id);
     }
 

@@ -1,6 +1,6 @@
 package com.uaic.server.controller;
 
-import com.uaic.server.entities.UserDTO;
+import com.uaic.server.entities.UserOutDTO;
 import com.uaic.server.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +18,9 @@ public class UserController {
     }
 
     @GetMapping("/user-info")
-    public ResponseEntity<UserDTO> getUserInfo() {
+    public ResponseEntity<UserOutDTO> getUserInfo() {
         // Fetch user information from the service
-        UserDTO userInfo = userService.getAuthenticatedUserInfo();
+        UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
 
         // Return response with appropriate status
         return ResponseEntity.ok(userInfo);
