@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -23,7 +24,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
+    public ResponseEntity<Employee> getEmployee(@PathVariable UUID id) {
         Optional<Employee> employee = employeeService.findEmployeeById(id);
         if (employee.isPresent()) {
             return new ResponseEntity<>(employee.get(), HttpStatus.OK);
@@ -39,7 +40,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
+    public ResponseEntity<Void> updateEmployee(@PathVariable UUID id, @RequestBody Employee employee) {
         if (employeeService.checkExistentEmployeeById(id)) {
             employee.setId(id);
             employeeService.createOrUpdateEmployee(employee);
@@ -50,7 +51,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable UUID id) {
         if (employeeService.checkExistentEmployeeById(id)) {
             employeeService.deleteEmployeeById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
