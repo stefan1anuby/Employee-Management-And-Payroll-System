@@ -1,7 +1,11 @@
 package com.uaic.server.controller;
 
 import com.uaic.server.entities.Employee;
+import com.uaic.server.entities.EmployeeOutDTO;
+import com.uaic.server.entities.UserOutDTO;
+import com.uaic.server.services.BusinessService;
 import com.uaic.server.services.EmployeeService;
+import com.uaic.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +18,39 @@ import java.util.UUID;
 @RequestMapping("/api/employees")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
+    private final UserService userService;
+
+    public EmployeeController(EmployeeService employeeService, UserService userService) {
+        this.employeeService = employeeService;
+        this.userService = userService;
+    }
 
     @GetMapping
     public ResponseEntity<Iterable<Employee>> getEmployees() {
         Iterable<Employee> employees = employeeService.findEmployees();
         return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<EmployeeOutDTO> getMe() {
+
+        // Retrieve the authenticated user's information
+        UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
+
+        Optional<Employee> employee = employeeService.findEmployeeByEmail(userInfo.getEmail());
+        if (employee.isPresent()) {
+            EmployeeOutDTO employeeOutDTO = new EmployeeOutDTO();
+            Employee employeeObj = employee.get();
+            employeeOutDTO.setId(employeeObj.getId());
+            employeeOutDTO.setName(employeeObj.getName());
+            employeeOutDTO.setEmail(employeeObj.getEmail());
+            employeeOutDTO.setRole(employeeObj.getRole());
+
+            return new ResponseEntity<>(employeeOutDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}")
