@@ -52,6 +52,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
 
             case INVALID:
+                // GOD please forgive me for this "fix"
+                if(request.getMethod().equals("OPTIONS")) {
+                    break;
+                }
                 sendUnauthorizedError(response, "Invalid access token. Please log in again to generate a new token.");
                 return;
         }

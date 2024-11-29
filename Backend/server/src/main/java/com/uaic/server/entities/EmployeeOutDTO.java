@@ -12,5 +12,16 @@ public class EmployeeOutDTO {
     private String phoneNumber;
     private String department;
     private Employee.Role role;
+
+    public static EmployeeOutDTO mapToEmployeeOutDTO(Employee employee) {
+        EmployeeOutDTO dto = new EmployeeOutDTO();
+        dto.setId(employee.getId());
+        dto.setName(employee.getName());
+        dto.setEmail(employee.getEmail());
+        dto.setPhoneNumber(employee.getPhoneNumber());
+        dto.setRole(employee.getRole());
+        dto.setDepartment(employee.getDepartment() != null ? employee.getDepartment().getName() : null); // Handle null department
+        return dto;
+    }
 }
 

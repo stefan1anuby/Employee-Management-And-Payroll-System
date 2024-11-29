@@ -34,7 +34,7 @@ public class BusinessController {
 
         // Map entities to DTOs
         List<BusinessOutDTO> businessDTOs = StreamSupport.stream(businesses.spliterator(), false)
-                .map(this::mapToBusinessOutDTO)
+                .map(BusinessOutDTO::mapToBusinessOutDTO)
                 .collect(Collectors.toList());
 
         // Return the DTO list
@@ -53,7 +53,7 @@ public class BusinessController {
     }
 
     @PostMapping
-    public ResponseEntity<BusinessOutDTO> addBusiness(@RequestBody BusinessInDTO business) {
+    public ResponseEntity<BusinessOutDTO> createBusiness(@RequestBody BusinessInDTO business) {
 
         // Retrieve the authenticated user's information
         UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
@@ -129,7 +129,7 @@ public class BusinessController {
 
             // Convert each Employee entity to an EmployeeOutDTO
             List<EmployeeOutDTO> employeeOutDTOs = StreamSupport.stream(employees.spliterator(), false)
-                    .map(this::mapToEmployeeOutDTO) // Use the helper method
+                    .map(EmployeeOutDTO::mapToEmployeeOutDTO) // Use the helper method
                     .collect(Collectors.toList());
 
             // Return the list of EmployeeOutDTOs
@@ -180,7 +180,7 @@ public class BusinessController {
 
         // Save the newly created Employee entity to the database
         Employee employeeCreated = employeeService.createOrUpdateEmployee(employeeToCreate);
-        EmployeeOutDTO employeeOutDTO = mapToEmployeeOutDTO(employeeCreated);
+        EmployeeOutDTO employeeOutDTO = EmployeeOutDTO.mapToEmployeeOutDTO(employeeCreated);
 
         // Return the created Employee object and a CREATED HTTP status
         return new ResponseEntity<>(employeeOutDTO, HttpStatus.CREATED);
@@ -212,31 +212,4 @@ public class BusinessController {
         }
     }
 
-    private BusinessOutDTO mapToBusinessOutDTO(Business business) {
-        // Map Business to BusinessOutDTO
-        BusinessOutDTO dto = new BusinessOutDTO();
-        dto.setId(business.getId());
-        dto.setName(business.getName());
-        dto.setAddress(business.getAddress());
-        dto.setIndustry(business.getIndustry());
-        if (business.getEmployees() != null) {
-            /*
-            dto.setEmployees(business.getEmployees().stream()
-                    .map(this::mapToEmployeeOutDTO)
-                    .collect(Collectors.toList()));
-             */
-        }
-        return dto;
-    }
-
-    private EmployeeOutDTO mapToEmployeeOutDTO(Employee employee) {
-        EmployeeOutDTO dto = new EmployeeOutDTO();
-        dto.setId(employee.getId());
-        dto.setName(employee.getName());
-        dto.setEmail(employee.getEmail());
-        dto.setPhoneNumber(employee.getPhoneNumber());
-        dto.setRole(employee.getRole());
-        dto.setDepartment(employee.getDepartment() != null ? employee.getDepartment().getName() : null); // Handle null department
-        return dto;
-    }
 }
