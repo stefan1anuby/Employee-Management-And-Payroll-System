@@ -13,9 +13,14 @@ public class EmployeeOutDTO {
     private String department;
     private Employee.Role role;
 
+    private UUID businessId;
+    private String businessName;
+
     public static EmployeeOutDTO mapToEmployeeOutDTO(Employee employee) {
         EmployeeOutDTO dto = new EmployeeOutDTO();
         dto.setId(employee.getId());
+        dto.setBusinessId(employee.getBusiness().getId());
+        dto.setBusinessName(employee.getBusiness().getName());
         dto.setName(employee.getName());
         dto.setEmail(employee.getEmail());
         dto.setPhoneNumber(employee.getPhoneNumber());

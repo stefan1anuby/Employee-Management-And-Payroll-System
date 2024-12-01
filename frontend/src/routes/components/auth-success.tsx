@@ -18,7 +18,7 @@ export default function AuthSuccessPage() {
     navigate('/sign-in'); // Redirect if tokens are missing
   }
 
-  const { loading, employeeExists, error } = useCheckEmployeeStatus(accessToken);
+  const { loading, employeeExists, employeeData, error } = useCheckEmployeeStatus(accessToken);
 
   useEffect(() => {
     if (loading) return;
@@ -26,12 +26,12 @@ export default function AuthSuccessPage() {
     if (error) {
       console.error(error);
       navigate('/error'); // Redirect to an error page if needed
-    } else if (employeeExists) {
+    } else if (employeeExists && employeeData) {
       navigate('/'); // Redirect to home if employee exists
     } else {
       navigate('/welcome'); // Redirect to welcome if employee does not exist
     }
-  }, [loading, employeeExists, error, navigate]);
+  }, [loading, employeeExists, employeeData, error, navigate]);
 
   return <div>{loading ? 'Authenticating...' : 'Redirecting...'}</div>;
 }

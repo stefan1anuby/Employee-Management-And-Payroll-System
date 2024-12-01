@@ -40,12 +40,7 @@ public class EmployeeController {
 
         Optional<Employee> employee = employeeService.findEmployeeByEmail(userInfo.getEmail());
         if (employee.isPresent()) {
-            EmployeeOutDTO employeeOutDTO = new EmployeeOutDTO();
-            Employee employeeObj = employee.get();
-            employeeOutDTO.setId(employeeObj.getId());
-            employeeOutDTO.setName(employeeObj.getName());
-            employeeOutDTO.setEmail(employeeObj.getEmail());
-            employeeOutDTO.setRole(employeeObj.getRole());
+            EmployeeOutDTO employeeOutDTO = EmployeeOutDTO.mapToEmployeeOutDTO(employee.get());
 
             return new ResponseEntity<>(employeeOutDTO, HttpStatus.OK);
         } else {
