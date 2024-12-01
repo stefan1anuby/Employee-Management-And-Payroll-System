@@ -1,10 +1,12 @@
 import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
+
+import { useCheckEmployeeStatus } from 'src/utils/employee';
 
 import { _notifications } from 'src/_mock';
 
@@ -31,10 +33,37 @@ export type DashboardLayoutProps = {
   };
 };
 
+type BusinessInfoType = {
+  id: string;
+  name: string;
+  logo: string;
+  plan: string;
+};
+
 export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) {
   const theme = useTheme();
 
   const [navOpen, setNavOpen] = useState(false);
+  const [businessInfo, setBusinessInfo] = useState<BusinessInfoType[]>([]);
+  
+  const { employeeData } = useCheckEmployeeStatus(null); // Assuming this call fetches the data
+
+  useEffect(() => {
+    if (employeeData) {
+      // Transform the employeeData object
+      const businessInfoObj = [{
+        id: employeeData.businessId || 'unknown-id', // Default ID if missing
+        name: employeeData.businessName || 'Unknown Name', // Default name if missing
+        logo: employeeData.logo || `/assets/icons/workspaces/logo-1.webp`, // Default logo if missing
+        plan: employeeData.role || 'Employee', // Use role as the plan, or default to 'Admin'
+      }];
+      setBusinessInfo(businessInfoObj);
+    }
+  }, [employeeData]);
+
+  if (businessInfo.length === 0) {
+    return <div>Loading...</div>;
+  }
 
   const layoutQuery: Breakpoint = 'lg';
 
@@ -64,7 +93,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                 data={navData}
                 open={navOpen}
                 onClose={() => setNavOpen(false)}
-                workspaces={_workspaces}
+                workspaces={businessInfo}
               />
             ),
             rightArea: (
@@ -72,6 +101,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                 <Searchbar />
                 <NotificationsPopover data={_notifications} />
                 <AccountPopover
+                  user={employeeData}
                   data={[
                     {
                       label: 'Home',
@@ -99,7 +129,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
        * Sidebar
        *************************************** */
       sidebarSection={
-        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
+        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={businessInfo} />
       }
       /** **************************************
        * Footer
