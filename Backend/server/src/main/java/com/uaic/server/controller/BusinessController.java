@@ -85,11 +85,7 @@ public class BusinessController {
         Employee employeeToReturn = employeeService.createOrUpdateEmployee(employeeToCreate);
 
         // Create a new BusinessOutDTO to return as the response
-        BusinessOutDTO businessToReturn = new BusinessOutDTO();
-        businessToReturn.setId(businessCreated.getId());        // Set the business ID
-        businessToReturn.setName(businessToCreate.getName());   // Set the business name
-        businessToReturn.setAddress(businessToCreate.getAddress()); // Set the business address
-        businessToReturn.setIndustry(businessToCreate.getIndustry()); // Set the business industry
+        BusinessOutDTO businessToReturn = BusinessOutDTO.mapToBusinessOutDTO(businessCreated);
 
         // Return the BusinessOutDTO with the created business data and a CREATED HTTP status
         return new ResponseEntity<>(businessToReturn, HttpStatus.CREATED);
