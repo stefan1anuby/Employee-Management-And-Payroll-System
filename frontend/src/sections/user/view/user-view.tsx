@@ -59,7 +59,8 @@ export function UserView() {
   const table = useTable();
 
   const [filterName, setFilterName] = useState('');
-  const businessId = localStorage.getItem('business_id');
+  const me = JSON.parse(localStorage.getItem('me') || '{}');
+  const {businessId} = me;
   const { data } = useFetch(`http://localhost:8080/api/businesses/${businessId}/employees`);
 
   const dataFiltered: UserProps[] = applyFilter({
