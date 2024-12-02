@@ -17,10 +17,10 @@ import { Iconify } from 'src/components/iconify';
 
 export type WorkspacesPopoverProps = ButtonBaseProps & {
   data?: {
-    id: string;
-    name: string;
-    logo: string;
-    plan?: string;
+    id: any;
+    name: any;
+    logo: any;
+    plan?: any;
   }[];
 };
 

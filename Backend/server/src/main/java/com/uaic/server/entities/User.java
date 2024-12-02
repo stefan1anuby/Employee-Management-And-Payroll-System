@@ -1,56 +1,71 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.uaic.server.entities;
 
-import jakarta.annotation.Generated;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-
-/**
- *
- * @author G
- */
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-public class User   {
+@Table(name = "users")
+public class User {
 
-  
-   
-   @Id
-   private Integer id;
-   private String username;
-   
-   
+     @Id
+     @Column(columnDefinition = "uuid")
+     @GeneratedValue(strategy = GenerationType.AUTO)
+     private UUID id;
+     private String userId;
+     private String email;
+     private String name;
+     private LocalDateTime registerDate;
+     private LocalDateTime expirationDate;
 
-   
-   private String pwHash;
-   
-   private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+     public User() {
+     }
 
+     public User(String email, String name, LocalDateTime registerDate) {
+          this.email = email;
+          this.name = name;
+          this.registerDate = registerDate;
+     }
 
-   public User() {}
+     public UUID getId() {
+          return id;
+     }
 
-   public User(Integer id,String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.pwHash = encoder.encode(password);
-   }
+     public String getUserId() {
+          return userId;
+     }
 
-   public String getUsername() {
-        return username;
-   }
+     public String getEmail() {
+          return email;
+     }
 
-    public Integer getId() {
-        return id;
-    }
-   
-   public boolean isMatchingPassword(String password) {
-        return encoder.matches(password, pwHash);
-   }
+     public String getName() {
+          return name;
+     }
+
+     public LocalDateTime getRegisterDate() {
+          return registerDate;
+     }
+
+     public LocalDateTime getExpirationDate() {
+          return expirationDate;
+     }
+
+     public void setUserId(String userId) {
+          this.userId = userId;
+     }
+
+     public void setEmail(String email) {
+          this.email = email;
+     }
+
+     public void setName(String name) {
+          this.name = name;
+     }
+
+     public void setExpirationDate(LocalDateTime expirationDate) {
+          this.expirationDate = expirationDate;
+     }
+
 }
