@@ -22,11 +22,8 @@ public class Post {
     private UUID id;
 
     private String text;
-
     private String author;
-
     private String businessOfAuthor;
-
     private LocalDateTime timestamp;
 
     // Many-to-one relation with Employee
