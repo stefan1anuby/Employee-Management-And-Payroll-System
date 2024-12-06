@@ -38,7 +38,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<Post> getPost(@PathVariable UUID postId) {
+    public ResponseEntity<PostOutDTO> getPost(@PathVariable UUID postId) {
 
         UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
 
@@ -58,7 +58,8 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(post, HttpStatus.OK);
+        PostOutDTO postOutDTO = PostOutDTO.mapToPostOutDTO(post);
+        return new ResponseEntity<>(postOutDTO, HttpStatus.OK);
 
     }
 
@@ -70,15 +71,11 @@ public class PostController {
         // Verify if the name of the connected user is the same to the name
         // of the author of the post
         if (!userInfo.getName().equals(postInDTO.getAuthor())) {
-            System.out.println(userInfo.getName() + " " + userInfo.getName().getClass());
-            System.out.println(postInDTO.getAuthor() + " " + postInDTO.getAuthor().getClass());
-            System.out.println("Not the good name!");
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Optional<Employee> optionalEmployee = employeeService.findEmployeeByEmail(userInfo.getEmail());
         if (!optionalEmployee.isPresent()) {
-            System.out.println("Not the employee!");
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -110,9 +107,6 @@ public class PostController {
         }
 
         // Check if the connected user is the one that made the post
-        System.out.println(post.getEmployee());
-        System.out.println(userInfo.getEmail());
-        System.out.println(post.getEmployee().getEmail());
         if (!userInfo.getEmail().equals(post.getEmployee().getEmail())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
