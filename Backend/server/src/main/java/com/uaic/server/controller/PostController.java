@@ -54,7 +54,7 @@ public class PostController {
         Optional<Employee> optionalEmployee = employeeService.findEmployeeByEmail(userInfo.getEmail());
         if (!optionalEmployee.isPresent() ||
                 (optionalEmployee.isPresent()
-                        && optionalEmployee.get().getBusiness().equals(post.getEmployee().getBusiness()))) {
+                        && !optionalEmployee.get().getBusiness().equals(post.getEmployee().getBusiness()))) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
