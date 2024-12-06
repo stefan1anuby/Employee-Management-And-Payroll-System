@@ -23,7 +23,6 @@ public class Post {
 
     private String text;
     private String author;
-    private String businessOfAuthor;
     private LocalDateTime timestamp;
 
     // Many-to-one relation with Employee
@@ -35,10 +34,9 @@ public class Post {
     public Post() {
     }
 
-    public Post(String text, String author, String businessOfAuthor, LocalDateTime timestamp) {
+    public Post(String text, String author, LocalDateTime timestamp) {
         this.text = text;
         this.author = author;
-        this.businessOfAuthor = businessOfAuthor;
         this.timestamp = timestamp;
     }
 
@@ -64,14 +62,6 @@ public class Post {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getBusinessOfAuthor() {
-        return this.businessOfAuthor;
-    }
-
-    public void setBusinessOfAuthor(String businessOfAuthor) {
-        this.businessOfAuthor = businessOfAuthor;
     }
 
     public LocalDateTime getTimestamp() {

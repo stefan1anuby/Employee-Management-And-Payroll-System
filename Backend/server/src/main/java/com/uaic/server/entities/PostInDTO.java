@@ -9,16 +9,14 @@ public class PostInDTO {
 
     private String text;
     private String author;
-    private String businessOfAuthor;
     private LocalDateTime timestamp;
 
     public PostInDTO() {
     }
 
-    public PostInDTO(String text, String author, String businessOfAuthor, LocalDateTime timestamp) {
+    public PostInDTO(String text, String author, LocalDateTime timestamp) {
         this.text = text;
         this.author = author;
-        this.businessOfAuthor = businessOfAuthor;
         this.timestamp = timestamp;
     }
 

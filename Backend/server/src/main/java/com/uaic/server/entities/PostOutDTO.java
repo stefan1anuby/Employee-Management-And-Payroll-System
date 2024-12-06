@@ -11,7 +11,6 @@ public class PostOutDTO {
     private UUID id;
     private String text;
     private String author;
-    private String businessOfAuthor;
     private LocalDateTime timestamp;
 
     public static PostOutDTO mapToPostOutDTO(Post post) {
@@ -19,7 +18,6 @@ public class PostOutDTO {
         postOutDTO.setId(post.getId());
         postOutDTO.setText(post.getText());
         postOutDTO.setAuthor(post.getAuthor());
-        postOutDTO.setBusinessOfAuthor(post.getBusinessOfAuthor());
         postOutDTO.setTimestamp(post.getTimestamp());
         return postOutDTO;
     }
