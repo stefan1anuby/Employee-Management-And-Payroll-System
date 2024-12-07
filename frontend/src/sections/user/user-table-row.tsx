@@ -42,6 +42,37 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
     setOpenPopover(null);
   }, []);
 
+  const handleDelete = async () => {
+    handleClosePopover(); // Close the popover first
+
+    const token = localStorage.getItem('access_token');
+    const me = JSON.parse(localStorage.getItem('me') || '{}');
+  const {businessId} = me; 
+    if (!token || !businessId) {
+      console.error('No access token or business ID found in local storage');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/businesses/${businessId}/employees/${row.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete employee');
+      }
+
+      // Handle successful deletion (e.g., refresh the list, show a success message, etc.)
+      console.log('Employee deleted successfully');
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+    }
+  };
+
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
@@ -100,7 +131,7 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
             Edit
           </MenuItem>
 
-          <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:trash-bin-trash-bold" />
             Delete
           </MenuItem>
