@@ -52,9 +52,12 @@ public class PostController {
         // as the person that made the post
         Post post = optionalPost.get();
         Optional<Employee> optionalEmployee = employeeService.findEmployeeByEmail(userInfo.getEmail());
-        if (!optionalEmployee.isPresent() ||
-                (optionalEmployee.isPresent()
-                        && !optionalEmployee.get().getBusiness().equals(post.getEmployee().getBusiness()))) {
+        if (!optionalEmployee.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Employee employee = optionalEmployee.get();
+        if (!employee.getBusiness().equals(post.getEmployee().getBusiness())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -80,7 +83,7 @@ public class PostController {
         // Create a new Post class
         Post post = new Post(
                 postInDTO.getText(),
-                postInDTO.getAuthor(),
+                employee.getEmail(),
                 postInDTO.getTimestamp());
         post.setEmployee(employee);
 
@@ -92,14 +95,10 @@ public class PostController {
 
     }
 
-    @PutMapping("/{postId}")
-    public ResponseEntity<Void> updatePost(@PathVariable UUID postId, @RequestBody Post post) {
+    @PutMapping
+    public ResponseEntity<Void> updatePost(@RequestBody Post post) {
 
         UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
-
-        if (!postService.checkPostById(postId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         // Check if the connected user is the one that made the post
         if (!userInfo.getEmail().equals(post.getEmployee().getEmail())) {
@@ -107,7 +106,6 @@ public class PostController {
         }
 
         // Update the id of the post and save it to the database
-        post.setId(postId);
         postService.createPost(post);
         return new ResponseEntity<>(HttpStatus.OK);
 

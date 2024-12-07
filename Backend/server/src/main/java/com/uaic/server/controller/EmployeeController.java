@@ -102,9 +102,12 @@ public class EmployeeController {
         // Verify if the connected user is an employee at the same business
         Employee employeeToLook = optionalEmployeeToLook.get();
         Optional<Employee> optionalConnectedEmployee = employeeService.findEmployeeByEmail(userInfo.getEmail());
-        if (!optionalConnectedEmployee.isPresent() ||
-                (optionalConnectedEmployee.isPresent()
-                        && !optionalConnectedEmployee.get().getBusiness().equals(employeeToLook.getBusiness()))) {
+        if (!optionalConnectedEmployee.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Employee connectedEmployee = optionalConnectedEmployee.get();
+        if (!connectedEmployee.getBusiness().equals(employeeToLook.getBusiness())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 

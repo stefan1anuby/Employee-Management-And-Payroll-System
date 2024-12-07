@@ -8,15 +8,13 @@ import lombok.Data;
 public class PostInDTO {
 
     private String text;
-    private String author;
     private LocalDateTime timestamp;
 
     public PostInDTO() {
     }
 
-    public PostInDTO(String text, String author, LocalDateTime timestamp) {
+    public PostInDTO(String text, LocalDateTime timestamp) {
         this.text = text;
-        this.author = author;
         this.timestamp = timestamp;
     }
 

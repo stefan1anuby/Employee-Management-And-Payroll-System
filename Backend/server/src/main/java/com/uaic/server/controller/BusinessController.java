@@ -223,6 +223,7 @@ public class BusinessController {
 
         UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
 
+        // TODO to be changed when solving businessId param redundancy
         Optional<Business> optionalBusiness = businessService.findBusinessById(businessId);
         if (!optionalBusiness.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -230,9 +231,12 @@ public class BusinessController {
 
         Business business = optionalBusiness.get();
         Optional<Employee> optionalConnectedEmployee = employeeService.findEmployeeByEmail(userInfo.getEmail());
-        if (!optionalConnectedEmployee.isPresent() ||
-                (optionalConnectedEmployee.isPresent()
-                        && !optionalConnectedEmployee.get().getBusiness().equals(business))) {
+        if (!optionalConnectedEmployee.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Employee connectedEmployee = optionalConnectedEmployee.get();
+        if (!connectedEmployee.getBusiness().equals(business)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
