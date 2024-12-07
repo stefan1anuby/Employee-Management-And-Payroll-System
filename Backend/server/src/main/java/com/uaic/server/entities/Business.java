@@ -64,8 +64,6 @@ public class Business {
         this.industry = industry;
     }
 
-
-
     public List<Employee> getEmployees() {
         return employees;
     }
@@ -73,5 +71,13 @@ public class Business {
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
-}
 
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || this.getClass() != object.getClass())
+            return false;
+        Business business = (Business) object;
+        return this.id != null && this.getId().equals(business.getId());
+    }
+
+}

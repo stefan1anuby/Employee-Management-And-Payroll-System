@@ -22,7 +22,8 @@ public class BusinessController {
     private final EmployeeService employeeService;
     private final UserService userService;
 
-    public BusinessController(BusinessService businessService, EmployeeService employeeService, UserService userService) {
+    public BusinessController(BusinessService businessService, EmployeeService employeeService,
+            UserService userService) {
         this.businessService = businessService;
         this.employeeService = employeeService;
         this.userService = userService;
@@ -58,7 +59,8 @@ public class BusinessController {
         // Retrieve the authenticated user's information
         UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
 
-        // Check if an employee with the same email as the authenticated user already exists
+        // Check if an employee with the same email as the authenticated user already
+        // exists
         if (employeeService.findEmployeeByEmail(userInfo.getEmail()).isPresent()) {
             // Return a conflict status if the employee already exists
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -66,9 +68,9 @@ public class BusinessController {
 
         // Create a new Business entity from the incoming BusinessInDTO
         Business businessToCreate = new Business(
-                business.getName(),          // Set the business name
-                business.getAddress(),       // Set the business address
-                business.getIndustry()       // Set the business industry
+                business.getName(), // Set the business name
+                business.getAddress(), // Set the business address
+                business.getIndustry() // Set the business industry
         );
 
         // Save the new Business entity to the database
@@ -76,22 +78,23 @@ public class BusinessController {
 
         // Create a new Employee entity for the authenticated user
         Employee employeeToCreate = new Employee();
-        employeeToCreate.setName(userInfo.getName());           // Set the employee's name
-        employeeToCreate.setEmail(userInfo.getEmail());         // Set the employee's email
-        employeeToCreate.setRole(Employee.Role.ADMIN);          // Set the employee's role as ADMIN
-        employeeToCreate.setBusiness(businessCreated);          // Associate the employee with the created business
+        employeeToCreate.setName(userInfo.getName()); // Set the employee's name
+        employeeToCreate.setEmail(userInfo.getEmail()); // Set the employee's email
+        employeeToCreate.setRole(Employee.Role.ADMIN); // Set the employee's role as ADMIN
+        employeeToCreate.setBusiness(businessCreated); // Associate the employee with the created business
 
         // Save the new Employee entity to the database
         Employee employeeToReturn = employeeService.createOrUpdateEmployee(employeeToCreate);
 
         // Create a new BusinessOutDTO to return as the response
         BusinessOutDTO businessToReturn = new BusinessOutDTO();
-        businessToReturn.setId(businessCreated.getId());        // Set the business ID
-        businessToReturn.setName(businessToCreate.getName());   // Set the business name
+        businessToReturn.setId(businessCreated.getId()); // Set the business ID
+        businessToReturn.setName(businessToCreate.getName()); // Set the business name
         businessToReturn.setAddress(businessToCreate.getAddress()); // Set the business address
         businessToReturn.setIndustry(businessToCreate.getIndustry()); // Set the business industry
 
-        // Return the BusinessOutDTO with the created business data and a CREATED HTTP status
+        // Return the BusinessOutDTO with the created business data and a CREATED HTTP
+        // status
         return new ResponseEntity<>(businessToReturn, HttpStatus.CREATED);
     }
 
@@ -142,7 +145,8 @@ public class BusinessController {
 
     // TODO
     @GetMapping("/{businessId}/employees/{employeeId}")
-    public ResponseEntity<Employee> getEmployeeByBusiness(@PathVariable UUID businessId, @PathVariable UUID employeeId) {
+    public ResponseEntity<Employee> getEmployeeByBusiness(@PathVariable UUID businessId,
+            @PathVariable UUID employeeId) {
         Optional<Employee> employee = businessService.getEmployeeByBusinessAndEmployeeId(businessId, employeeId);
         if (employee.isPresent()) {
             return new ResponseEntity<>(employee.get(), HttpStatus.OK);
@@ -174,9 +178,9 @@ public class BusinessController {
 
         // Create a new Employee entity using the authenticated user's information
         Employee employeeToCreate = new Employee();
-        employeeToCreate.setName(userInfo.getName());           // Set the employee's name
-        employeeToCreate.setEmail(userInfo.getEmail());         // Set the employee's email
-        employeeToCreate.setBusiness(business.get());           // Associate the employee with the found business
+        employeeToCreate.setName(userInfo.getName()); // Set the employee's name
+        employeeToCreate.setEmail(userInfo.getEmail()); // Set the employee's email
+        employeeToCreate.setBusiness(business.get()); // Associate the employee with the found business
 
         // Save the newly created Employee entity to the database
         Employee employeeCreated = employeeService.createOrUpdateEmployee(employeeToCreate);
@@ -191,6 +195,7 @@ public class BusinessController {
     public ResponseEntity<Void> updateEmployeeInBusiness(@PathVariable UUID businessId, @PathVariable UUID employeeId, @RequestBody Employee employee) {
 
         // the Employee who makes this call should not be the same Employee who gets the updates, and also to edit something you have to need maybe a HR or ADMIN role?
+
         Optional<Business> business = businessService.findBusinessById(businessId);
         if (business.isPresent() && employeeService.checkExistentEmployeeById(employeeId)) {
             employee.setId(employeeId);
@@ -204,7 +209,8 @@ public class BusinessController {
 
     // TODO
     @DeleteMapping("/{businessId}/employees/{employeeId}")
-    public ResponseEntity<Void> deleteEmployeeFromBusiness(@PathVariable UUID businessId, @PathVariable UUID employeeId) {
+    public ResponseEntity<Void> deleteEmployeeFromBusiness(@PathVariable UUID businessId,
+            @PathVariable UUID employeeId) {
         Optional<Business> business = businessService.findBusinessById(businessId);
         if (business.isPresent() && employeeService.checkExistentEmployeeById(employeeId)) {
             employeeService.deleteEmployeeById(employeeId);
@@ -212,6 +218,40 @@ public class BusinessController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/{businessId}/posts")
+    public ResponseEntity<Iterable<PostOutDTO>> getPostsByBusiness(@PathVariable UUID businessId) {
+
+        UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
+
+        // TODO to be changed when solving businessId param redundancy
+        Optional<Business> optionalBusiness = businessService.findBusinessById(businessId);
+        if (!optionalBusiness.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Business business = optionalBusiness.get();
+        Optional<Employee> optionalConnectedEmployee = employeeService.findEmployeeByEmail(userInfo.getEmail());
+        if (!optionalConnectedEmployee.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Employee connectedEmployee = optionalConnectedEmployee.get();
+        if (!connectedEmployee.getBusiness().equals(business)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        List<Employee> employees = businessService.getEmployeesByBusiness(businessId);
+
+        List<PostOutDTO> postsOutDTO = employees.stream()
+                .flatMap(employee -> employee.getPosts().stream()
+                        .map(PostOutDTO::mapToPostOutDTO))
+                .collect(Collectors.toList());
+
+        Iterable<PostOutDTO> iterablePostsOutDTO = postsOutDTO;
+        return new ResponseEntity<>(iterablePostsOutDTO, HttpStatus.OK);
+
     }
 
 }
