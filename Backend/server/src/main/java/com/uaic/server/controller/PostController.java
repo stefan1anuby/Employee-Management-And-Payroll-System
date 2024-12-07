@@ -68,12 +68,7 @@ public class PostController {
 
         UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
 
-        // Verify if the name of the connected user is the same to the name
-        // of the author of the post
-        if (!userInfo.getName().equals(postInDTO.getAuthor())) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
+        // Verify if the user is an employee
         Optional<Employee> optionalEmployee = employeeService.findEmployeeByEmail(userInfo.getEmail());
         if (!optionalEmployee.isPresent()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
