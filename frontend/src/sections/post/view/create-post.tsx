@@ -12,15 +12,51 @@ import Button from '@mui/material/Button';
 
 // ----------------------------------------------------------------------
 
+
+
+
 export function CreatePost() {
 
     const [input, setInput] = useState('');
-    const [inputURL, setInputURL] = useState('');
     
-    const handleSubmit = (e: { preventDefault: () => void; }) => {
+    
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
       e.preventDefault();
-      // Handle form submission logic here
-      console.log('Post submitted:', { input, inputURL });
+  
+      const token = localStorage.getItem('access_token'); 
+      const me = JSON.parse(localStorage.getItem('me') || '{}');
+      const {email} = me;
+      if (!token) {
+        console.error('No access token found in local storage');
+        return;
+      }
+  
+      const postInDTO = {
+        text: input,
+        author: email,
+        timestamp: new Date().toISOString(),
+      };
+  
+      try {
+        const response = await fetch('http://localhost:8080/api/posts', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postInDTO)
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to create post');
+        }
+  
+        const postOutDTO = await response.json();
+        console.log('Post created successfully:', postOutDTO);
+        setInput('');
+      } catch (error) {
+        console.error('Error creating post:', error);
+      }
     };
   
   return (

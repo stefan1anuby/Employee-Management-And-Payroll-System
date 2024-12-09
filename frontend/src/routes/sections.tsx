@@ -20,6 +20,7 @@ export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const WelcomePage = lazy(() => import('src/pages/welcome'));
 export const PostPage = lazy(() => import('src/pages/post'));
+export const NewsPage = lazy(() => import('src/pages/news'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const AuthSuccessPage = lazy(() => import('src/routes/components/auth-success'));
 
@@ -57,6 +58,12 @@ export function Router() {
           path: 'create-post',
           element: (
               <PostPage/>
+          ),
+        },
+        {
+          path: 'feed',
+          element: (
+              <NewsPage/>
           ),
         }
       ],
