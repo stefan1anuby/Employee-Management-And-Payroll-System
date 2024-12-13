@@ -17,6 +17,9 @@ jobs:
           distribution: temurin
           cache: maven
 
+      - name: Set executable permissions for Maven wrapper
+        run: chmod +x Backend/server/mvnw
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
         env:
