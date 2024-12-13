@@ -18,11 +18,11 @@ jobs:
           cache: maven
 
       - name: Set executable permissions for Maven wrapper
-        run: chmod +x Backend/server/mvnw
+        run: chmod +x ./Backend/server/mvnw
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --file=Backend/server/pom.xml
+          args: --file=./Backend/server/pom.xml
