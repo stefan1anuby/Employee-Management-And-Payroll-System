@@ -1,0 +1,46 @@
+name: Example workflow for Maven using Snyk
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    env:
+       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: corretto
+          cache: maven
+
+      - name: Set executable permissions for Maven wrapper
+        run: chmod +x mvnw
+        working-directory: ./Backend/server
+
+      - name: Build with Maven
+        run: ./mvnw -B package
+        working-directory: ./Backend/server
+
+      - name: Set up Node 14
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+        working-directory: ./Backend/server
+
+      - name: Run Snyk Open Source Test
+        run: snyk test
+        working-directory: ./Backend/server
+
+      - name: Run Snyk Code Test
+        run: snyk code test
+        working-directory: ./Backend/server
+
