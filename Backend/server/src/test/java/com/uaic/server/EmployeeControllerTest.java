@@ -81,6 +81,16 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    public void testFailGetMe() {
+        when(userService.getAuthenticatedUserInfo()).thenReturn(testUser);
+        when(employeeService.findEmployeeByEmail(testUser.getEmail())).thenReturn(Optional.empty());
+
+        ResponseEntity<EmployeeOutDTO> response = employeeController.getMe();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     public void testGetEmployee() {
         when(employeeService.findEmployeeById(testEmployee.getId())).thenReturn(Optional.of(testEmployee));
 
@@ -88,6 +98,16 @@ public class EmployeeControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(testEmployee);
+    }
+
+    @Test
+    public void testFailGetEmployee() {
+        when(employeeService.findEmployeeById(testEmployee.getId())).thenReturn(Optional.empty());
+
+        ResponseEntity<Employee> response = employeeController.getEmployee(testEmployee.getId());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
     }
 
     @Test
@@ -110,6 +130,15 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    public void testFailUpdateEmployee() {
+        when(employeeService.checkExistentEmployeeById(testEmployee.getId())).thenReturn(false);
+
+        ResponseEntity<Void> response = employeeController.updateEmployee(testEmployee.getId(), testEmployee);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     public void testDeleteEmployee() {
         when(employeeService.checkExistentEmployeeById(testEmployee.getId())).thenReturn(true);
         doNothing().when(employeeService).deleteEmployeeById(testEmployee.getId());
@@ -117,6 +146,15 @@ public class EmployeeControllerTest {
         ResponseEntity<Void> response = employeeController.deleteEmployee(testEmployee.getId());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    public void testFailDeleteEmployee() {
+        when(employeeService.checkExistentEmployeeById(testEmployee.getId())).thenReturn(false);
+
+        ResponseEntity<Void> response = employeeController.deleteEmployee(testEmployee.getId());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
