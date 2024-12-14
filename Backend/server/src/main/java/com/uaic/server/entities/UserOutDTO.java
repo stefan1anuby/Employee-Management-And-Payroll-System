@@ -28,6 +28,8 @@ public class UserOutDTO {
         this.details = details;
     }
 
+    public UserOutDTO() {
+    }
     // Getters and setters (can be generated or use Lombok @Data)
 }
 
