@@ -44,10 +44,23 @@ public class BusinessController {
 
     // TODO
     @GetMapping("/{id}")
-    public ResponseEntity<Business> getBusiness(@PathVariable UUID id) {
+    public ResponseEntity<BusinessOutDTO> getBusiness(@PathVariable UUID id) {
         Optional<Business> business = businessService.findBusinessById(id);
+
+        UserOutDTO userInfo = userService.getAuthenticatedUserInfo();
+
+        Optional<Employee> employee = employeeService.findEmployeeByEmail(userInfo.getEmail());
+
+        if (!employee.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        if(!employee.get().getBusiness().getId().equals(id)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         if (business.isPresent()) {
-            return new ResponseEntity<>(business.get(), HttpStatus.OK);
+            return new ResponseEntity<>(BusinessOutDTO.mapToBusinessOutDTO(business.get()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

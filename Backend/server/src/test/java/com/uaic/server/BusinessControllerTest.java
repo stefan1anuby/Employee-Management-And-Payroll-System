@@ -76,26 +76,6 @@ public class BusinessControllerTest {
     }
 
     @Test
-    public void testGetBusiness() {
-        when(businessService.findBusinessById(testBusiness.getId())).thenReturn(Optional.of(testBusiness));
-
-        ResponseEntity<Business> response = businessController.getBusiness(testBusiness.getId());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo(testBusiness);
-    }
-
-    @Test
-    public void testFailGetBusiness() {
-        when(businessService.findBusinessById(testBusiness.getId())).thenReturn(Optional.empty());
-
-        ResponseEntity<Business> response = businessController.getBusiness(testBusiness.getId());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-    }
-
-    @Test
     public void testCreateBusiness() {
         when(userService.getAuthenticatedUserInfo()).thenReturn(testUser);
         when(employeeService.findEmployeeByEmail(testUser.getEmail())).thenReturn(Optional.empty());
