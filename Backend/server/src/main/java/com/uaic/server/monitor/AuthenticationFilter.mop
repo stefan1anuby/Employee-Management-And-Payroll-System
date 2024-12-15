@@ -1,0 +1,44 @@
+package mop;
+
+import com.uaic.server.security.JwtAuthenticationFilter;
+import com.uaic.server.security.JwtUtil;
+
+AuthenticationFilter(JwtAuthenticationFilter filter, JwtUtil util) {
+
+    event extracttoken after(JwtAuthenticationFilter filter) : 
+        call(* JwtAuthenticationFilter.extractToken(..)) && target(filter) {
+            System.out.println("The token is extracted");
+        }
+
+    event validatetoken after(JwtUtil util) :
+        call(* JwtUtil.validateToken(..)) && target(util) {
+            System.out.println("The token is validated");
+        }
+
+    event extractclaims after(JwtUtil util) :
+        call(* JwtUtil.extractClaims(..)) && target(util) {
+            System.out.println("The claims are extracted to create a new access token");
+        }
+
+    event createuserfromclaims after(JwtAuthenticationFilter filter) :
+        call (* JwtAuthenticationFilter.createUserFromClaims(..)) && target(filter) {
+            System.out.println("An user is created from the claims");
+        }
+
+    event createaccesstoken after(JwtUtil util) :
+        call(* JwtUtil.createAccessToken(..)) && target(util) {
+            System.out.println("A new access token is created");
+        }
+
+    event sendunauthorizederror after(JwtAuthenticationFilter filter) :
+        call(* JwtAuthenticationFilter.sendUnauthorizedError(..)) && target(filter) {
+            System.out.println("The access token and the refresh token are invalid");
+        }
+
+    ere: validatetoken extracttoken ((extractclaims createuserfromclaims) || ((extractclaims createaccesstoken) || sendunauthorizederror) || sendunauthorizederror)
+    @fail {
+        System.err.println("The order for token authentication was not respected");
+        __RESET;
+    }
+
+}

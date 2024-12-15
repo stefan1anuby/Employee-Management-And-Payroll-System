@@ -1,0 +1,31 @@
+package mop;
+
+import com.uaic.server.security.JwtAuthenticationFilter;
+import com.uaic.server.security.JwtUtil;
+AuthenticationFilter(JwtAuthenticationFilter filter, JwtUtil util) {
+	event extracttoken(JwtAuthenticationFilter filter){
+		System.out.println("The token is extracted");
+	}
+	event validatetoken(JwtUtil util){
+		System.out.println("The token is validated");
+	}
+	event extractclaims(JwtUtil util){
+		System.out.println("The claims are extracted to create a new access token");
+	}
+	event createuserfromclaims(JwtAuthenticationFilter filter){
+		System.out.println("An user is created from the claims");
+	}
+	event createaccesstoken(JwtUtil util){
+		System.out.println("A new access token is created");
+	}
+	event sendunauthorizederror(JwtAuthenticationFilter filter){
+		System.out.println("The access token and the refresh token are invalid");
+	}
+	ere:  validatetoken extracttoken ((extractclaims createuserfromclaims) || ((extractclaims createaccesstoken) || sendunauthorizederror) || sendunauthorizederror)
+
+	@fail
+	{
+		System.err.println("The order for token authentication was not respected");
+		__RESET;
+	}
+}
