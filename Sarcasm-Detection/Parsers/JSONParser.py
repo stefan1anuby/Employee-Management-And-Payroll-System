@@ -1,7 +1,7 @@
 import json
 
-input_file = "Sarcasm_Headlines_Dataset.json"
-output_file = "Structured_Sarcasm_Headlines_Dataset.json"
+input_file = "../Corpora/Sarcasm_Headlines_Dataset.json"
+output_file = "../Corpora/Structured_Sarcasm_Headlines_Dataset.json"
 
 structured_data = {
     "text": [],

@@ -3,11 +3,9 @@ import pandas as pd
 import torch
 import SarcasmDataset
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-from datasets import load_dataset
 from transformers import TrainingArguments, Trainer, AutoTokenizer, AutoModelForSequenceClassification
 
-with open("../Structured_Sarcasm_Headlines_Dataset.json", "r", encoding="utf-8") as file:
+with open("../Corpora/Structured_Sarcasm_Headlines_Dataset.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
 print(len(data['text']))
