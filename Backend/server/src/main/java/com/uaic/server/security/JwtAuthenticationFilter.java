@@ -31,71 +31,94 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-            @NonNull FilterChain chain) throws ServletException, IOException {
+                                    @NonNull FilterChain chain) throws ServletException, IOException {
 
-        String accessToken = getToken(request, "Authorization");
-        String refreshToken = null;
-        if (accessToken == null)
+        String accessToken = extractToken(request, "Authorization");
+        String refreshToken = request.getParameter("refresh_token");
+
+        if (accessToken == null) {
             accessToken = request.getParameter("access_token");
-        if (refreshToken == null)
-            refreshToken = request.getParameter("refresh_token");
-        if (jwtUtil.validateToken(accessToken) == 0) {
-            Claims accessClaims = jwtUtil.extractClaims(accessToken);
-            User newUser = extractUserFromToken(accessClaims);
-            if (accessClaims.getSubject() != null && (SecurityContextHolder.getContext().getAuthentication() == null ||
-                    (SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder
-                            .getContext().getAuthentication() instanceof OAuth2AuthenticationToken))) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(newUser,
-                        null, null);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } else if (jwtUtil.validateToken(accessToken) == 1) {
-            if (jwtUtil.validateToken(refreshToken) == 0) {
-                Claims refreshClaims = jwtUtil.extractClaims(refreshToken);
-                String refreshUserId = refreshClaims.getSubject();
-                String refreshEmail = refreshClaims.get("email", String.class);
-                String refreshName = refreshClaims.get("name", String.class);
-                String newAccessToken = jwtUtil.createAccessToken(refreshUserId, refreshEmail, refreshName);
-                System.out.println("Is it equal " + accessToken.equals(newAccessToken));
-                String redirectURL = request.getRequestURL().toString() + "?access_token=" + newAccessToken
-                        + "&refresh_token=" + refreshToken;
-                response.sendRedirect(redirectURL);
-                return;
-            } else {
-                SecurityContextHolder.getContext().setAuthentication(null);
-                SecurityContextHolder.clearContext();
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                        "Invalid or expired refresh token. Login again in order to generate a new token.");
-                return;
-            }
-        } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                    "Invalid access token. Login again in order to generate a new token.");
-            return;
         }
+
+        JwtTokenStatus tokenStatus = jwtUtil.validateToken(accessToken);
+
+        switch (tokenStatus) {
+            case VALID:
+                authenticateUser(request, accessToken);
+                break;
+
+            case EXPIRED:
+                handleExpiredAccessToken(request, response, refreshToken);
+                return;
+
+            case INVALID:
+                // GOD please forgive me for this "fix"
+                if(request.getMethod().equals("OPTIONS")) {
+                    break;
+                }
+                sendUnauthorizedError(response, "Invalid access token. Please log in again to generate a new token.");
+                return;
+        }
+
         chain.doFilter(request, response);
     }
 
-    private String getToken(HttpServletRequest request, String headerName) {
-        String authorizationHeader = request.getHeader(headerName);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.substring(7);
-        } else
-            return null;
+    private void authenticateUser(HttpServletRequest request, String accessToken) {
+        // Extract claims from the JWT access token
+        Claims claims = jwtUtil.extractClaims(accessToken);
+
+        // Create a User object based on the claims from the token
+        User user = createUserFromClaims(claims);
+
+        // Create an authentication token with the extracted User object
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(user, null, null);
+
+        // Set the authentication details based on the current HTTP request
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+        // Store the authentication in the SecurityContextHolder
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
     }
 
-    private User extractUserFromToken(Claims claims) {
+    private void handleExpiredAccessToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) throws IOException {
+        if (refreshToken != null && jwtUtil.validateToken(refreshToken) == JwtTokenStatus.VALID) {
+            Claims claims = jwtUtil.extractClaims(refreshToken);
+            String newAccessToken = jwtUtil.createAccessToken(
+                    claims.getSubject(),
+                    claims.get("email", String.class),
+                    claims.get("name", String.class)
+            );
+
+            String redirectUrl = request.getRequestURL().toString() + "?access_token=" + newAccessToken + "&refresh_token=" + refreshToken;
+            response.sendRedirect(redirectUrl);
+        } else {
+            sendUnauthorizedError(response, "Invalid or expired refresh token. Please log in again to generate a new token.");
+        }
+    }
+
+    private void sendUnauthorizedError(HttpServletResponse response, String message) throws IOException {
+        SecurityContextHolder.clearContext();
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
+    }
+
+    private String extractToken(HttpServletRequest request, String headerName) {
+        String headerValue = request.getHeader(headerName);
+        return (headerValue != null && headerValue.startsWith("Bearer ")) ? headerValue.substring(7) : null;
+    }
+
+    private User createUserFromClaims(Claims claims) {
         String userId = claims.getSubject();
         String email = claims.get("email", String.class);
         String name = claims.get("name", String.class);
-        LocalDateTime registerDate = claims.getIssuedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDateTime expirationDate = claims.getExpiration().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-        User user = new User(email, name, registerDate);
+
+        LocalDateTime issuedAt = claims.getIssuedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime expiration = claims.getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+        User user = new User(email, name, issuedAt);
         user.setUserId(userId);
-        user.setExpirationDate(expirationDate);
+        user.setExpirationDate(expiration);
         return user;
     }
-
 }

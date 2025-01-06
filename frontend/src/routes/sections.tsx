@@ -8,6 +8,8 @@ import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
 
+import { SimpleLayout } from 'src/layouts/simple';
+import { WelcomeView } from 'src/sections/welcome';
 import { LogoutPage } from './components/logout';
 import ProtectedRoute from './components/protected-route';
 
@@ -16,6 +18,9 @@ import ProtectedRoute from './components/protected-route';
 export const HomePage = lazy(() => import('src/pages/home'));
 export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
+export const WelcomePage = lazy(() => import('src/pages/welcome'));
+export const PostPage = lazy(() => import('src/pages/post'));
+export const NewsPage = lazy(() => import('src/pages/news'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const AuthSuccessPage = lazy(() => import('src/routes/components/auth-success'));
 
@@ -49,18 +54,33 @@ export function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'user', element: <UserPage /> },
+        {
+          path: 'create-post',
+          element: (
+              <PostPage/>
+          ),
+        },
+        {
+          path: 'feed',
+          element: (
+              <NewsPage/>
+          ),
+        }
       ],
     },
-    {
-      path: 'auth-success',
-      element: <AuthSuccessPage />,
-    },
+    { path: 'auth-success', element: <AuthSuccessPage /> },
     {
       path: 'sign-in',
       element: (
         <AuthLayout>
           <SignInPage />
         </AuthLayout>
+      ),
+    },
+    {
+      path: 'welcome',
+      element: (
+          <WelcomePage/>
       ),
     },
     {

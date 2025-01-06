@@ -8,7 +8,6 @@ CREATE TABLE Users (
     CreatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-
 CREATE TABLE Departments (
     department_id SERIAL PRIMARY KEY,
     name VARCHAR(50),
@@ -16,6 +15,13 @@ CREATE TABLE Departments (
 );
 
 CREATE TYPE employee_role AS ENUM ('Manager', 'HR');
+
+CREATE TABLE Businesses (
+    business_id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    address VARCHAR(100),
+    industry VARCHAR(100)
+);
 
 CREATE TABLE Employees (
     employee_id SERIAL PRIMARY KEY,
@@ -26,6 +32,6 @@ CREATE TABLE Employees (
     salary DECIMAL(10, 2),
     team VARCHAR(255),
     managed_employee_ids INT[] DEFAULT ARRAY[]::INT[],
-    department_id INT REFERENCES Departments(department_id) ON DELETE SET NULL
+    department_id INT REFERENCES Departments(department_id) ON DELETE SET NULL,
+    business_id INT REFERENCES Businesses(business_id) ON DELETE SET NULL
 );
-

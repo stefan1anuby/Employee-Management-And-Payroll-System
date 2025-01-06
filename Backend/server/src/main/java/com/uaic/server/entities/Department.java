@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -19,9 +20,9 @@ import java.util.List;
 @Entity
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "department_id")
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "department_id", columnDefinition = "uuid")
+    private UUID id;
 
     private String name;
     private String location;
@@ -32,18 +33,18 @@ public class Department {
     public Department() {
     }
 
-    public Department(Integer id, String name, String location, List<Employee> employees) {
+    public Department(UUID id, String name, String location, List<Employee> employees) {
         this.id = id;
         this.name = name;
         this.location = location;
         this.employees = employees;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

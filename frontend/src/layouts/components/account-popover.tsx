@@ -26,9 +26,13 @@ export type AccountPopoverProps = IconButtonProps & {
     icon?: React.ReactNode;
     info?: React.ReactNode;
   }[];
+  user?: {
+    name: string;
+    email: string;
+  };
 };
 
-export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps) {
+export function AccountPopover({ data = [], user, sx, ...other }: AccountPopoverProps) {
   const router = useRouter();
 
   const pathname = usePathname();
@@ -90,11 +94,11 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
       >
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {_myAccount?.displayName}
+            {user?.name || "User name"}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {_myAccount?.email}
+            {user?.email || "User email"}
           </Typography>
         </Box>
 

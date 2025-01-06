@@ -5,11 +5,17 @@
 package com.uaic.server.services;
 
 import com.uaic.server.entities.Employee;
+import com.uaic.server.entities.Post;
+
 import org.springframework.stereotype.Service;
 import com.uaic.server.repositories.EmployeeRepository;
-import java.time.LocalDateTime;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -18,14 +24,21 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Service
 public class EmployeeService {
+
     @Autowired
     private EmployeeRepository employeeRepository;
-    
+
+    public List<Post> getPostsByEmployee(UUID id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        return employee.getPosts();
+    }
+
     public Employee createOrUpdateEmployee(Employee employee) {
         return employeeRepository.save(employee);
     }
 
-    public boolean checkExistentEmployeeById(Integer id) {
+    public boolean checkExistentEmployeeById(UUID id) {
         return employeeRepository.existsById(id);
     }
 
@@ -37,8 +50,7 @@ public class EmployeeService {
         return employeeRepository.existsByEmail(email);
     }
 
-
-    public Optional<Employee> findEmployeeById(Integer id) {
+    public Optional<Employee> findEmployeeById(UUID id) {
         return employeeRepository.findById(id);
     }
 
@@ -50,8 +62,6 @@ public class EmployeeService {
         return employeeRepository.findByEmail(email);
     }
 
-    
-
     public Iterable<Employee> findEmployees() {
         return employeeRepository.findAll();
     }
@@ -60,7 +70,7 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
-    public void deleteEmployeeById(Integer id) {
+    public void deleteEmployeeById(UUID id) {
         employeeRepository.deleteById(id);
     }
 
@@ -72,12 +82,11 @@ public class EmployeeService {
         employeeRepository.deleteByEmail(email);
     }
 
-   
     public void deleteUsers(Iterable<Employee> employees) {
         employeeRepository.deleteAll(employees);
     }
 
-    public void deleteEmployeesById(Iterable<Integer> ids) {
+    public void deleteEmployeesById(Iterable<UUID> ids) {
         employeeRepository.deleteAllById(ids);
     }
 
@@ -88,5 +97,13 @@ public class EmployeeService {
     public long numberOfEmployees() {
         return employeeRepository.count();
     }
-    
+
+    public Iterable<Employee> findEmployeesByRole(Employee.Role role) {
+        return employeeRepository.findByRole(role);
+    }
+
+    public Iterable<Employee> findEmployeesByTeam(String team) {
+        return employeeRepository.findByTeam(team);
+    }
+
 }

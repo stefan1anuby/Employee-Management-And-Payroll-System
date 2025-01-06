@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
@@ -24,15 +23,48 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { UserProps } from '../user-table-row';
 
+// Custom hook to fetch data from an API with an access token from local storage
+export function useFetch(url: string | null) {
+  const [data, setData] = useState<any>(null);
+  // const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const token = localStorage.getItem('access_token'); // Retrieve token from local storage
+      if (!token) {
+        console.error('No access token found in local storage');
+        // setLoading(false);
+        return;
+      }
+      
+      const response = await fetch(url!, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const result = await response.json();
+      console.log(result);
+      setData(result);
+      // setLoading(false);
+    }
+    fetchData();
+  }, [url]);
+
+  return { data};
+}
+
 // ----------------------------------------------------------------------
 
 export function UserView() {
   const table = useTable();
 
   const [filterName, setFilterName] = useState('');
+  const me = JSON.parse(localStorage.getItem('me') || '{}');
+  const {businessId} = me;
+  const { data } = useFetch(`http://localhost:8080/api/businesses/${businessId}/employees`);
 
   const dataFiltered: UserProps[] = applyFilter({
-    inputData: _users,
+    inputData: data || [],
     comparator: getComparator(table.order, table.orderBy),
     filterName,
   });
@@ -70,22 +102,21 @@ export function UserView() {
               <UserTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={_users.length}
+                rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users.map((user) => user.id)
+                    dataFiltered.map((user) => user.id)
                   )
                 }
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
+                  { id: 'email', label: 'Email' },
+                  { id: 'phoneNumber', label: 'Phone Number' },
+                  { id: 'team', label: 'Team' },
                   { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
-                  { id: '' },
                 ]}
               />
               <TableBody>
@@ -105,7 +136,7 @@ export function UserView() {
 
                 <TableEmptyRows
                   height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered.length)}
                 />
 
                 {notFound && <TableNoData searchQuery={filterName} />}
@@ -117,7 +148,7 @@ export function UserView() {
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={dataFiltered.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}
@@ -195,3 +226,8 @@ export function useTable() {
     onChangeRowsPerPage,
   };
 }
+
+
+
+
+

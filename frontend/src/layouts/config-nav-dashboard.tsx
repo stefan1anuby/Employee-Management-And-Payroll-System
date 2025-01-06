@@ -18,4 +18,12 @@ export const navData = [
     path: '/user',
     icon: icon('ic-user'),
   },
-];
+  {
+    title: 'News feed',
+    path: '/feed',
+    icon: icon('ic-analytics'),
+  } ,{
+    title: 'Create Post',
+    path: '/create-post',
+    icon: icon('ic-user'),
+  }];
