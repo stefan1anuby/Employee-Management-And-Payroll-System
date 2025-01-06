@@ -5,7 +5,7 @@ import SarcasmDataset
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from datasets import load_dataset
-from transformers import BertTokenizer, BertForSequenceClassification, TrainingArguments, Trainer, pipeline, AutoModel, AutoTokenizer
+from transformers import TrainingArguments, Trainer, AutoTokenizer, AutoModelForSequenceClassification
 
 with open("Structured_Sarcasm_Headlines_Dataset.json", "r", encoding="utf-8") as file:
     data = json.load(file)
@@ -17,7 +17,7 @@ df = pd.DataFrame({
 
 train_texts, test_texts, train_labels, test_labels = train_test_split(df["text"], df["is_sarcastic"], test_size=0.2, random_state=42)
 
-tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
 train_encodings = tokenizer(list(train_texts), truncation=True, padding=True, max_length=128, return_tensors="pt")
 test_encodings = tokenizer(list(test_texts), truncation=True, padding=True, max_length=128, return_tensors="pt")
 
@@ -27,7 +27,7 @@ test_labels = torch.tensor(list(test_labels))
 train_dataset = SarcasmDataset.SarcasmDataset(train_encodings, train_labels)
 test_dataset = SarcasmDataset.SarcasmDataset(test_encodings, test_labels)
 
-model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
+model = AutoModelForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
 
 # #set the training arguments
 training_args = TrainingArguments(
