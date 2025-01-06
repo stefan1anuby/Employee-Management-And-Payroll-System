@@ -7,8 +7,11 @@ from sklearn.metrics import classification_report
 from datasets import load_dataset
 from transformers import TrainingArguments, Trainer, AutoTokenizer, AutoModelForSequenceClassification
 
-with open("Structured_Sarcasm_Headlines_Dataset.json", "r", encoding="utf-8") as file:
+with open("../Structured_Sarcasm_Headlines_Dataset.json", "r", encoding="utf-8") as file:
     data = json.load(file)
+
+print(len(data['text']))
+print(len(data['is_sarcastic']))
 
 df = pd.DataFrame({
     "text": data["text"],
@@ -31,10 +34,10 @@ model = AutoModelForSequenceClassification.from_pretrained("bert-base-uncased", 
 
 # #set the training arguments
 training_args = TrainingArguments(
-    output_dir="./results",
+    output_dir="../results",
     eval_strategy="epoch",
     save_strategy="epoch",
-    logging_dir="./logs",
+    logging_dir="../logs",
     learning_rate=2e-5,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
