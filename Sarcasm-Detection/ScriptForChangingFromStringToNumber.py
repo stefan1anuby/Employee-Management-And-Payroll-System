@@ -7,8 +7,11 @@ output_file = "Corpora/Structured_Corpus.json"
 with open(input_file1, 'r', encoding='utf-8') as file1:
     data = json.load(file1)
 
-with open(input_file2, 'r', encoding='utf-8') as file2:
+with open(output_file, 'r', encoding='utf-8') as file2:
     corpus = json.load(file2)
+
+print(len(corpus['text']))
+print(len(corpus['is_sarcastic']))
 
 for text in data['text']:
     corpus['text'].append(text)
@@ -16,5 +19,8 @@ for text in data['text']:
 for number in data['sarcastic']:
     corpus['is_sarcastic'].append(int(number))
 
-with open(output_file, 'w', encoding='utf-8') as result:
-    json.dump(corpus, result, indent=4)
+# with open(output_file, 'w', encoding='utf-8') as result:
+#     json.dump(corpus, result, indent=4)
+
+print(len(corpus['text']))
+print(len(corpus['is_sarcastic']))

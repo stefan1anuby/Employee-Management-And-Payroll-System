@@ -1,5 +1,6 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
 model = AutoModelForSequenceClassification.from_pretrained("../saved-new-pretrain")
 tokenizer = AutoTokenizer.from_pretrained("../saved-new-pretrain")
@@ -111,7 +112,17 @@ comments = [
         "Nah Bernies been booling since the civil rights movement",
         "Only took me 1 hour.",
         "It's like if Red Hood and Spider-Man did a fusion ha.",
-        "Now you know how Trump got elected."
+        "Now you know how Trump got elected.",
+        "Oh, because working 60 hours a week is the dream I had as a kid!",
+        "Another meeting that could have been an email? Sign me up!",
+        "Wow, this unpaid internship will totally help me pay my rent. Thanks for the opportunity!",
+        "Great, another task added to my plate. I was just thinking how bored I was!",
+        "Sure, I'll work late again. It’s not like I had any plans or a life outside of work.",
+        "Oh, yes, I absolutely love being micromanaged. It makes me feel so trusted!",
+        "Wow, you need this yesterday? Lucky for you, I can manipulate time!",
+        "Nothing beats the thrill of answering emails at 11 PM. Living the dream!",
+        "Oh, another corporate wellness seminar? I'm sure this one will cure all my stress!",
+        "I’m so lucky to be the only one who knows how to fix the copier. What an honor!"
 ]
 
 values = [
@@ -221,7 +232,17 @@ values = [
         0,
         1,
         0,
-        0
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
 ]
 
 tokenized_comments = tokenizer(comments, return_tensors="pt", truncation=True, padding=True, max_length=512)
@@ -240,3 +261,11 @@ for text, predicted_class, prob in zip(comments, predicted_classes, probabilitie
     value = values[index]
     index += 1
     print(f"Text: {text} Prediction: {response} Real value: {value} (Prob: {prob[predicted_class].item():.2f})")
+
+metrics = {
+    "accuracy": accuracy_score(values, predicted_classes),
+    "precision": float(precision_score(values, predicted_classes)),
+    "recall": float(recall_score(values, predicted_classes)),
+    "f1_score": float(f1_score(values, predicted_classes))
+}
+print(metrics)

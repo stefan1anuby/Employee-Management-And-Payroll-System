@@ -43,7 +43,7 @@ def returnSarcasticState():
     predicted_class = torch.argmax(probability, dim=-1).numpy()
 
     if predicted_class == 0:
-        response = make_response(jsonify({"message": "Skibidi"}), 200)
+        response = make_response(jsonify({"message": "The message is not sarcastic"}), 200)
     else:
         response = make_response(jsonify({"message": "Cannot post a sarcastic comment! Please write something genuine."}), 403)
     return response
