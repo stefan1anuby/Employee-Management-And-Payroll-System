@@ -2,8 +2,8 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
-model = AutoModelForSequenceClassification.from_pretrained("../saved-new-pretrain")
-tokenizer = AutoTokenizer.from_pretrained("../saved-new-pretrain")
+model = AutoModelForSequenceClassification.from_pretrained("../saved-third-pretrain")
+tokenizer = AutoTokenizer.from_pretrained("../saved-third-pretrain")
 
 comments = [
     "Oh, another meeting about meetings? My productivity is through the roof!",

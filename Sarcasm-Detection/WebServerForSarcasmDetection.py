@@ -12,8 +12,8 @@ CORS(app, resources = {r"/sarcasm": {
 }})
 
 # Store the model and the tokenizer for sarcasm detection
-model = AutoModelForSequenceClassification.from_pretrained("./saved-new-pretrain")
-tokenizer = AutoTokenizer.from_pretrained("./saved-new-pretrain")
+model = AutoModelForSequenceClassification.from_pretrained("./saved-third-pretrain")
+tokenizer = AutoTokenizer.from_pretrained("./saved-third-pretrain")
 
 # Function for checking if a comment is sarcastic
 @app.route("/sarcasm", methods = ['GET'])
