@@ -14,6 +14,7 @@ export type PostProps = {
   id: string;
   text: string;
   author: string;
+  reaction: boolean;
 };
 
 // ----------------------------------------------------------------------
