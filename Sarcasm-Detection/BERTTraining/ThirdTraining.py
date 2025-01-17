@@ -5,8 +5,10 @@ import SarcasmDataset
 from sklearn.model_selection import train_test_split
 from transformers import TrainingArguments, Trainer, AutoTokenizer, AutoModelForSequenceClassification
 
-with open("../Corpora/Structured_Corpus.json", "r", encoding="utf-8") as file:
+with open("../Corpora/New_Structured_Corpus.json", "r", encoding="utf-8") as file:
     data = json.load(file)
+
+print(len(data["text"]) == len(data["is_sarcastic"]))
 
 df = pd.DataFrame({
     "text": data["text"],
@@ -52,5 +54,5 @@ trainer = Trainer(
 trainer.train()
 
 #save the model and the tokenizer for future use
-model.save_pretrained("./saved-fourth-pretrain")
-tokenizer.save_pretrained("./saved-fourth-pretrain")
+model.save_pretrained("./saved-fifth-pretrain")
+tokenizer.save_pretrained("./saved-fifth-pretrain")
