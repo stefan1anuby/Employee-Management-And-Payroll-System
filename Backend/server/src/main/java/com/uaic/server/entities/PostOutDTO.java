@@ -12,6 +12,7 @@ public class PostOutDTO {
     private String text;
     private String author;
     private LocalDateTime timestamp;
+    private boolean reaction;
 
     public static PostOutDTO mapToPostOutDTO(Post post) {
         PostOutDTO postOutDTO = new PostOutDTO();
@@ -19,6 +20,7 @@ public class PostOutDTO {
         postOutDTO.setText(post.getText());
         postOutDTO.setAuthor(post.getAuthor());
         postOutDTO.setTimestamp(post.getTimestamp());
+        postOutDTO.setReaction(post.getReaction());
         return postOutDTO;
     }
 

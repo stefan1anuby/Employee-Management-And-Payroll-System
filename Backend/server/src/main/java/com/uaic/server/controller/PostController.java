@@ -84,7 +84,8 @@ public class PostController {
         Post post = new Post(
                 postInDTO.getText(),
                 employee.getEmail(),
-                postInDTO.getTimestamp());
+                postInDTO.getTimestamp(),
+                postInDTO.isReaction());
         post.setEmployee(employee);
 
         // Save the created post into the database
