@@ -2,8 +2,8 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
-model = AutoModelForSequenceClassification.from_pretrained("../saved-third-pretrain")
-tokenizer = AutoTokenizer.from_pretrained("../saved-third-pretrain")
+model = AutoModelForSequenceClassification.from_pretrained("../saved-fifth-pretrain")
+tokenizer = AutoTokenizer.from_pretrained("../saved-fifth-pretrain")
 
 comments = [
     "Oh, another meeting about meetings? My productivity is through the roof!",
@@ -76,6 +76,17 @@ comments = [
     "Nothing beats the thrill of answering emails at 11 PM. Living the dream!",
     "Oh, another corporate wellness seminar? I'm sure this one will cure all my stress!",
     "I’m so lucky to be the only one who knows how to fix the copier. What an honor!",
+    "Another strategic pivot? I’m sure this one will finally solve everything.",
+    "Just love how ‘collaboration’ means being copied on emails for tasks I’m not involved in.",
+    "Nothing like ‘employee engagement’ surveys to remind us how much we’re not being engaged.",
+    "The best part about team celebrations? Watching the budget stretch for a single pizza slice each.",
+    "Oh, another motivational quote in the breakroom? That should definitely fix morale.",
+    "Love how ‘career development’ just means taking on more responsibilities for free.",
+    "Another brainstorming session scheduled during lunch? How thoughtful!",
+    "We’ve got a ‘lean team’? Translation: everyone’s doing three jobs now.",
+    "Can’t wait to hear about the ‘exciting new changes’ that will make everything more confusing.",
+    "The best thing about cross-department meetings is realizing how little we all understand each other.",
+    "The boss is so good, he gave us three additional hours of unpaid work",
     # Non sarcastic
     "Excited to contribute to this new project with such an amazing team!",
     "Great to see leadership recognizing the hard work of the entire department!",
@@ -136,7 +147,20 @@ comments = [
     "The way the team came together to tackle today’s challenges was nothing short of inspiring.",
     "Excited to take on a role where I can make a meaningful contribution to the company’s success.",
     "The new tools and processes we’ve implemented are really enhancing our productivity.",
-    "Thanks to everyone for making this workplace such a positive and dynamic environment!"
+    "Thanks to everyone for making this workplace such a positive and dynamic environment!",
+    "Proud to see our team delivering such impressive results under tight deadlines.",
+    "Grateful for the support from leadership during this challenging project.",
+    "Excited to see the positive impact of our new initiative on customer satisfaction.",
+    "It’s rewarding to watch our team’s hard work pay off in such meaningful ways.",
+    "Looking forward to learning from our upcoming training session!",
+    "Feeling inspired by the innovative solutions our team is coming up with.",
+    "Thanks to everyone who made our recent launch a massive success!",
+    "Proud to be part of an organization that genuinely values teamwork and collaboration.",
+    "The mentorship program has been a game-changer for my career development—thank you!",
+    "Excited to contribute to our company’s mission and make a difference in the industry.",
+    "The boss is so good, it made a pizza party",
+    "The boss was kind enough to explain what was wrong in our work",
+    "Michael is a good teammate"
 ]
 
 values = [
@@ -210,6 +234,30 @@ values = [
     1,
     1,
     1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     0,
@@ -271,6 +319,8 @@ values = [
     0,
     0
 ]
+
+print(len(comments))
 
 tokenized_comments = tokenizer(comments, return_tensors="pt", truncation=True, padding=True, max_length=512)
 
