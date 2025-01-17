@@ -24,6 +24,7 @@ public class Post {
     private String text;
     private String author;
     private LocalDateTime timestamp;
+    private boolean reaction;
 
     // Many-to-one relation with Employee
     @ManyToOne
@@ -34,10 +35,11 @@ public class Post {
     public Post() {
     }
 
-    public Post(String text, String author, LocalDateTime timestamp) {
+    public Post(String text, String author, LocalDateTime timestamp, boolean reaction) {
         this.text = text;
         this.author = author;
         this.timestamp = timestamp;
+        this.reaction = reaction;
     }
 
     public UUID getId() {
@@ -70,6 +72,14 @@ public class Post {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public boolean getReaction() {
+        return this.reaction;
+    }
+
+    public void setReaction(boolean reaction) {
+        this.reaction = reaction;
     }
 
     public Employee getEmployee() {

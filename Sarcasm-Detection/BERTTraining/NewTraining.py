@@ -52,5 +52,5 @@ trainer = Trainer(
 trainer.train()
 
 #save the model and the tokenizer for future use
-model.save_pretrained("./saved-third-pretrain")
-tokenizer.save_pretrained("./saved-third-pretrain")
+model.save_pretrained("./saved-fourth-pretrain")
+tokenizer.save_pretrained("./saved-fourth-pretrain")

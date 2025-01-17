@@ -11,23 +11,17 @@ CORS(app, resources = {r"/sarcasm": {
     "methods": ['GET']
 }})
 
-# Store the model and the tokenizer for sarcasm detection
-model = AutoModelForSequenceClassification.from_pretrained("./saved-third-pretrain")
-tokenizer = AutoTokenizer.from_pretrained("./saved-third-pretrain")
-
 # Function for checking if a comment is sarcastic
 @app.route("/sarcasm", methods = ['GET'])
 def returnSarcasticState():
 
     # Get encoded comment in the URL and decode it
     encodedComment = request.args.get('comment')
-    print(encodedComment)
     decodedComment = urllib.parse.unquote(encodedComment)
-    print(decodedComment)
 
     # Take the model and the tokenizer of the fine-tuned sarcasm database
-    model = AutoModelForSequenceClassification.from_pretrained("./saved-new-pretrain")
-    tokenizer = AutoTokenizer.from_pretrained("./saved-new-pretrain")
+    model = AutoModelForSequenceClassification.from_pretrained("./saved-fifth-pretrain")
+    tokenizer = AutoTokenizer.from_pretrained("./saved-fifth-pretrain")
 
     # Tokenize the comment
     tokenized_comment = tokenizer(decodedComment, return_tensors="pt", truncation=True, padding=True, max_length=512)
@@ -45,7 +39,10 @@ def returnSarcasticState():
     if predicted_class == 0:
         response = make_response(jsonify({"message": "The message is not sarcastic"}), 200)
     else:
-        response = make_response(jsonify({"message": "Cannot post a sarcastic comment! Please write something genuine."}), 403)
+        if probability.tolist()[0][1] < 0.95:
+            response = make_response(jsonify({"message": "The message has an acceptable level of sarcasm"}), 200)
+        else:
+            response = make_response(jsonify({"message": "Cannot post a sarcastic comment! Please write something genuine."}), 403)
     return response
 
 if __name__ == "__main__":

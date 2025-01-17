@@ -9,13 +9,15 @@ public class PostInDTO {
 
     private String text;
     private LocalDateTime timestamp;
+    private boolean reaction;
 
     public PostInDTO() {
     }
 
-    public PostInDTO(String text, LocalDateTime timestamp) {
+    public PostInDTO(String text, LocalDateTime timestamp, boolean reaction) {
         this.text = text;
         this.timestamp = timestamp;
+        this.reaction = reaction;
     }
 
 }
