@@ -11,4 +11,4 @@
 * <code>[Dumitru Daniel-Antoniu](https://github.com/Dumitru-Daniel-Antoniu)</code>
 
 ## Links:
-* Google Drive: https://drive.google.com/drive/folders/1KGGbuPUXFsKKYx10cbjUgXEKimo4cUnm
+* Technical Report: https://drive.google.com/drive/folders/1KGGbuPUXFsKKYx10cbjUgXEKimo4cUnm
